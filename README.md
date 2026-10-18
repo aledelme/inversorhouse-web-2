@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# InversorHouse
 
-## Getting Started
+Marketplace de oportunidades de inversión inmobiliaria: los **promotores** publican operaciones
+(CRV, CRA, ocupación, NPL, coinversión) y los **inversores** las buscan y contactan directamente.
 
-First, run the development server:
+- Next.js 16 (App Router, Cache Components) · React 19 · Tailwind 4 + shadcn/ui
+- PostgreSQL (Neon) + Drizzle · Clerk · Cloudflare R2 · next-intl (es)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Empezar
+
+```sh
+pnpm install
+cp .env.example .env.development.local   # y añade tus claves de Clerk *development*
+pnpm dev                                 # Docker + migraciones + http://localhost:3020
+pnpm db:seed                             # geografía INE + datos de ejemplo
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Guía completa: [docs/runbooks/local-dev.md](docs/runbooks/local-dev.md).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Documentación
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Para                            | Documento                                                                  |
+| ------------------------------- | -------------------------------------------------------------------------- |
+| Agentes de IA y desarrolladores | [AGENTS.md](AGENTS.md) (y los `AGENTS.md` de cada carpeta)                 |
+| Arquitectura                    | [docs/architecture.md](docs/architecture.md)                               |
+| Dominio y reglas de negocio     | [docs/domain.md](docs/domain.md)                                           |
+| Decisiones (ADR)                | [docs/adr/](docs/adr/)                                                     |
+| Despliegue                      | [docs/runbooks/deploy-vercel.md](docs/runbooks/deploy-vercel.md)           |
+| Administradores                 | [docs/runbooks/guia-administrador.md](docs/runbooks/guia-administrador.md) |
 
-## Learn More
+## Calidad
 
-To learn more about Next.js, take a look at the following resources:
+No hay CI: la batería completa se ejecuta en local y es obligatoria tras cada cambio.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```sh
+pnpm verify        # tipos, lint, formato, tests unitarios
+pnpm verify:full   # + integración (Postgres en Docker) + e2e (Playwright, build de producción)
+```

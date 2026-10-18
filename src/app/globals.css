@@ -1,26 +1,128 @@
 @import "tailwindcss";
+@import "../styles/theme.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-playfair), Georgia, serif;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-highlight: var(--highlight);
+  --color-highlight-foreground: var(--highlight-foreground);
+  --color-highlight-strong: var(--highlight-strong);
+  --color-inverse: var(--inverse);
+  --color-inverse-foreground: var(--inverse-foreground);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 10px);
+
+  --shadow-soft:
+    0 1px 2px rgb(var(--shadow-color) / 0.04), 0 4px 16px rgb(var(--shadow-color) / 0.06);
+  --shadow-lift:
+    0 2px 4px rgb(var(--shadow-color) / 0.05), 0 16px 40px rgb(var(--shadow-color) / 0.12);
+
+  --animate-fade-up: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display tracking-tight text-balance;
+  }
+  /* Playfair uses old-style figures by default; align numbers in prices and titles. */
+  .font-display,
+  h1,
+  h2,
+  h3 {
+    font-variant-numeric: lining-nums;
+  }
+  ::selection {
+    background: color-mix(in srgb, var(--highlight) 35%, transparent);
+  }
+}
+
+@utility container-page {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+@utility eyebrow {
+  @apply text-xs font-semibold tracking-[0.18em] text-highlight-strong uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Typography for user-written rich text (opportunity descriptions). */
+@layer components {
+  .rich-text {
+    @apply space-y-4 text-[0.975rem] leading-relaxed text-foreground/90;
+  }
+  .rich-text h2 {
+    @apply pt-2 text-2xl text-foreground;
+  }
+  .rich-text h3 {
+    @apply pt-1 text-xl text-foreground;
+  }
+  .rich-text ul {
+    @apply list-disc space-y-1 pl-5;
+  }
+  .rich-text ol {
+    @apply list-decimal space-y-1 pl-5;
+  }
+  .rich-text a {
+    @apply font-medium text-primary underline underline-offset-4;
+  }
+  .rich-text blockquote {
+    @apply border-l-2 border-highlight pl-4 text-muted-foreground italic;
+  }
+  .rich-text strong {
+    @apply font-semibold text-foreground;
+  }
 }

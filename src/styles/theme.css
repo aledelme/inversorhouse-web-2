@@ -1,0 +1,44 @@
+/*
+ * Brand tokens (ADR-0009). Change the brand here — components only use the
+ * semantic names exposed to Tailwind in globals.css (bg-primary, text-highlight…).
+ */
+:root {
+  /* Raw brand palette */
+  --brand-navy: #0f3460;
+  --brand-navy-deep: #0a2342;
+  --brand-navy-soft: #1e4a73;
+  --brand-gold: #d4a574;
+  --brand-gold-deep: #9c7243;
+  --brand-ivory: #faf8f4;
+
+  /* Semantic tokens (shadcn/ui contract + brand extras) */
+  --background: var(--brand-ivory);
+  --foreground: #0d1b2e;
+  --card: #ffffff;
+  --card-foreground: var(--foreground);
+  --popover: #ffffff;
+  --popover-foreground: var(--foreground);
+  --primary: var(--brand-navy);
+  --primary-foreground: #ffffff;
+  --secondary: #eef2f7;
+  --secondary-foreground: var(--brand-navy);
+  --muted: #f2efea;
+  --muted-foreground: #5a6474;
+  --accent: #ecf1f7; /* subtle hover surface (shadcn meaning) */
+  --accent-foreground: var(--brand-navy);
+  --destructive: #c62828;
+  --success: #0f7b5a;
+  --border: #e5e0d8;
+  --input: #ddd7cd;
+  --ring: var(--brand-navy-soft);
+
+  /* Brand extras */
+  --highlight: var(--brand-gold); /* decorative gold: rules, badges, icons on navy */
+  --highlight-foreground: var(--brand-navy-deep);
+  --highlight-strong: var(--brand-gold-deep); /* gold for text on light backgrounds (AA) */
+  --inverse: var(--brand-navy-deep); /* dark sections (hero, footer) */
+  --inverse-foreground: #f4f1ec;
+
+  --radius: 0.625rem;
+  --shadow-color: 15 52 96;
+}

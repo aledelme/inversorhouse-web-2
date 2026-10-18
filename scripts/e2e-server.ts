@@ -9,6 +9,8 @@ import { runMigrations } from "../src/db/migrate";
 import { seedGeo } from "../src/db/seed/geo";
 import { seedSampleData } from "../src/db/seed/sample";
 
+import { E2E_USERS } from "../tests/e2e/users";
+
 import { assertLocalServices, loadEnv } from "./lib/env";
 import { run, servicesUp } from "./lib/run";
 
@@ -26,7 +28,7 @@ async function main() {
     R2_PRIVATE_BUCKET: "inversorhouse-test-private",
     R2_ACCESS_KEY_ID: "inversorhouse",
     R2_SECRET_ACCESS_KEY: "inversorhouse-secret",
-    ADMIN_EMAILS: process.env.E2E_ADMIN_EMAIL ?? "admin+clerk_test@example.com",
+    ADMIN_EMAILS: E2E_USERS.admin.email,
   });
   assertLocalServices("e2e server", { allowOverride: false });
 

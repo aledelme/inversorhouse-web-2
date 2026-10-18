@@ -25,4 +25,4 @@ Rules:
   `tests/factories`. Use the `new-feature` skill to scaffold a slice.
 
 Current slices: `geo`, `opportunities`, `search`, `promoter-profile`, `interests`, `uploads`,
-`reports`, `admin`.
+`reports`, `admin`, `marketing`, `legal`.

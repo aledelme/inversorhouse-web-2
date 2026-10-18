@@ -42,7 +42,8 @@ export default defineConfig([
   {
     // Read env vars through `@/lib/env` so they are validated and typed.
     files: ["src/**/*.{ts,tsx}"],
-    ignores: ["src/lib/env.ts", "src/db/create.ts", "src/i18n/**"],
+    // Scripts/seeds run in plain Node (outside Next) and read their own env.
+    ignores: ["src/lib/env.ts", "src/db/create.ts", "src/db/seed/**", "src/i18n/**"],
     rules: {
       "no-restricted-syntax": [
         "error",

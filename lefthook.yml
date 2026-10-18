@@ -1,14 +1,16 @@
 # Git hooks (local only — there is no CI, see ADR-0008).
 # Skip in an emergency with LEFTHOOK=0 git commit ...
+# Commands run on the whole project (cached) instead of {staged_files}: on Windows a long
+# staged-file list exceeds the maximum command-line length.
 pre-commit:
   parallel: true
   jobs:
     - name: eslint
       glob: "*.{ts,tsx,mjs,js}"
-      run: pnpm eslint --max-warnings=0 {staged_files}
+      run: pnpm eslint --max-warnings=0 --cache --cache-location node_modules/.cache/eslint
     - name: prettier
       glob: "*.{ts,tsx,mjs,js,json,md,css,yml,yaml}"
-      run: pnpm prettier --check {staged_files}
+      run: pnpm prettier --check . --cache
     - name: typecheck
       glob: "*.{ts,tsx}"
       run: pnpm tsc --noEmit

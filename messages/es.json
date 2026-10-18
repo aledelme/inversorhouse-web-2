@@ -1,0 +1,570 @@
+{
+  "metadata": {
+    "title": "InversorHouse — Oportunidades de inversión inmobiliaria",
+    "titleTemplate": "%s · InversorHouse",
+    "description": "Marketplace de oportunidades de inversión inmobiliaria: CRV, CRA, ocupación, NPL y coinversión. Contacta directamente con el promotor."
+  },
+  "common": {
+    "brandTagline": "Inversión inmobiliaria, de tú a tú",
+    "skipToContent": "Saltar al contenido",
+    "menu": "Menú",
+    "close": "Cerrar",
+    "signIn": "Acceder",
+    "signUp": "Crear cuenta",
+    "publish": "Publicar oportunidad",
+    "viewAll": "Ver todas",
+    "back": "Volver",
+    "loading": "Cargando…",
+    "featured": "Destacada",
+    "new": "Nueva",
+    "months": "{count, plural, one {# mes} other {# meses}}",
+    "perYear": "anual",
+    "nominal": "total",
+    "notAvailable": "—",
+    "search": "Buscar",
+    "clear": "Limpiar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "error": "Algo ha ido mal. Inténtalo de nuevo.",
+    "retry": "Reintentar"
+  },
+  "nav": {
+    "opportunities": "Oportunidades",
+    "howItWorks": "Cómo funciona",
+    "forPromoters": "Para promotores",
+    "myPanel": "Mi panel",
+    "admin": "Administración"
+  },
+  "footer": {
+    "about": "Conectamos a promotores inmobiliarios con inversores que buscan oportunidades fuera del mercado tradicional.",
+    "platform": "Plataforma",
+    "legal": "Legal",
+    "contact": "Contacto",
+    "legalNotice": "Aviso legal",
+    "privacy": "Privacidad",
+    "cookies": "Cookies",
+    "terms": "Condiciones de uso",
+    "rights": "Todos los derechos reservados.",
+    "disclaimer": "InversorHouse es un tablón de anuncios: no asesora, no intermedia en la inversión ni gestiona fondos. Cada oportunidad la publica su promotor bajo su exclusiva responsabilidad. Toda inversión conlleva riesgos, incluida la pérdida del capital. Analiza la documentación y consulta con un profesional antes de invertir."
+  },
+  "home": {
+    "metaTitle": "Oportunidades de inversión inmobiliaria",
+    "eyebrow": "Marketplace de inversión inmobiliaria",
+    "title": "Oportunidades inmobiliarias, directamente de quien las promueve",
+    "subtitle": "Descubre operaciones de compra-reforma-venta, alquiler, ocupados, NPL y coinversión en toda España. Sin intermediarios: hablas directamente con el promotor.",
+    "ctaExplore": "Explorar oportunidades",
+    "ctaPublish": "Soy promotor",
+    "quickSearch": {
+      "type": "Tipo de operación",
+      "anyType": "Cualquier tipo",
+      "province": "Provincia",
+      "anyProvince": "Toda España",
+      "submit": "Buscar"
+    },
+    "featured": {
+      "eyebrow": "Selección InversorHouse",
+      "title": "Oportunidades destacadas"
+    },
+    "latest": {
+      "eyebrow": "Recién publicadas",
+      "title": "Últimas oportunidades",
+      "empty": "Todavía no hay oportunidades publicadas. ¡Sé el primero en publicar la tuya!"
+    },
+    "types": {
+      "eyebrow": "Tipos de operación",
+      "title": "Cinco formas de invertir en ladrillo",
+      "subtitle": "Cada promotor indica el tipo de operación, el capital que busca, el plazo y la rentabilidad esperada."
+    },
+    "how": {
+      "eyebrow": "Cómo funciona",
+      "title": "Simple para las dos partes",
+      "investors": {
+        "title": "Si inviertes",
+        "step1": {
+          "title": "Explora sin registrarte",
+          "body": "Filtra por tipo de operación, ubicación y ticket mínimo."
+        },
+        "step2": {
+          "title": "Crea tu cuenta gratis",
+          "body": "Accede a la documentación y a los datos de contacto del promotor."
+        },
+        "step3": {
+          "title": "Habla con el promotor",
+          "body": "Llama, agenda una cita o pulsa «Me interesa» para que te contacte."
+        }
+      },
+      "promoters": {
+        "title": "Si promueves",
+        "step1": {
+          "title": "Publica tu operación",
+          "body": "Describe la oportunidad, sube fotos y documentación en minutos."
+        },
+        "step2": {
+          "title": "Elige cómo te contactan",
+          "body": "Teléfono visible o enlace para agendar citas en tu calendario."
+        },
+        "step3": {
+          "title": "Recibe inversores",
+          "body": "Consulta en tu panel quién ha mostrado interés."
+        }
+      }
+    },
+    "principles": {
+      "direct": {
+        "title": "Contacto directo",
+        "body": "Sin intermediarios entre promotor e inversor."
+      },
+      "free": {
+        "title": "Sin coste",
+        "body": "Publicar y consultar oportunidades es gratuito."
+      },
+      "privacy": {
+        "title": "Privacidad primero",
+        "body": "Tus datos solo se comparten cuando tú decides."
+      }
+    },
+    "promoterCta": {
+      "eyebrow": "Para promotores",
+      "title": "¿Buscas capital para tu próxima operación?",
+      "body": "Publica tu oportunidad y llega a inversores que buscan exactamente lo que ofreces.",
+      "cta": "Publicar oportunidad"
+    }
+  },
+  "opportunityTypes": {
+    "CRV": {
+      "label": "CRV",
+      "name": "Compra, reforma y venta",
+      "description": "Adquirir un inmueble, reformarlo y venderlo con plusvalía en el corto plazo."
+    },
+    "CRA": {
+      "label": "CRA",
+      "name": "Compra, reforma y alquiler",
+      "description": "Adquirir y reformar para generar rentas recurrentes mediante el alquiler."
+    },
+    "OCUPACION": {
+      "label": "Ocupación",
+      "name": "Inmuebles ocupados",
+      "description": "Activos con ocupantes adquiridos con descuento, con su gestión de recuperación."
+    },
+    "NPL": {
+      "label": "NPL",
+      "name": "Deuda (Non-Performing Loans)",
+      "description": "Compra de créditos impagados con garantía inmobiliaria."
+    },
+    "COINVERSION": {
+      "label": "Coinversión",
+      "name": "Coinversión",
+      "description": "Participa junto al promotor en un proyecto con tickets más accesibles."
+    }
+  },
+  "opportunity": {
+    "annualReturn": "Rentabilidad anual",
+    "totalReturn": "Rentabilidad total",
+    "term": "Plazo",
+    "minTicket": "Ticket mínimo",
+    "noMinTicket": "Sin mínimo",
+    "amountToRaise": "Capital buscado",
+    "closesAt": "Cierre",
+    "openEnded": "Sin fecha de cierre",
+    "publishedAt": "Publicada el {date}",
+    "location": "Ubicación",
+    "description": "Descripción de la oportunidad",
+    "gallery": "Fotos del inmueble",
+    "photoAlt": "Foto {index} de «{title}»",
+    "noPhoto": "Sin fotos",
+    "keyFigures": "Cifras clave",
+    "documents": "Documentación",
+    "documentsTeaser": "{count, plural, =0 {Sin documentación adjunta} one {# documento disponible} other {# documentos disponibles}}",
+    "returnsNote": "Rentabilidad estimada por el promotor. No garantizada.",
+    "backToSearch": "Volver a oportunidades",
+    "share": "Compartir",
+    "notFound": {
+      "title": "Esta oportunidad ya no está disponible",
+      "body": "Puede que el promotor la haya retirado o que haya alcanzado su fecha de cierre.",
+      "cta": "Ver otras oportunidades"
+    },
+    "download": "Descargar",
+    "documentsLocked": "Regístrate para descargarla",
+    "fromAmount": "Desde {amount}"
+  },
+  "contact": {
+    "title": "Contacta con el promotor",
+    "lockedTitle": "Regístrate para ver el contacto",
+    "lockedBody": "Crea tu cuenta gratuita para ver los datos del promotor, descargar la documentación y mostrar interés.",
+    "lockedCta": "Crear cuenta gratis",
+    "lockedSignIn": "Ya tengo cuenta",
+    "promoter": "Promotor",
+    "call": "Llamar · {phone}",
+    "whatsapp": "Escribir por WhatsApp",
+    "book": "Agendar una cita",
+    "unavailable": "El promotor de esta oportunidad ya no está disponible.",
+    "ownListing": "Esta oportunidad es tuya. Así la ven los inversores registrados.",
+    "edit": "Editar oportunidad"
+  },
+  "search": {
+    "metaTitle": "Oportunidades de inversión inmobiliaria",
+    "metaDescription": "Busca oportunidades de inversión inmobiliaria por tipo de operación, comunidad autónoma, provincia, municipio y ticket mínimo.",
+    "eyebrow": "Marketplace",
+    "title": "Oportunidades de inversión",
+    "results": "{count, plural, =0 {Ninguna oportunidad} one {# oportunidad} other {# oportunidades}}",
+    "filters": "Filtros",
+    "showResults": "Ver resultados",
+    "clearFilters": "Limpiar filtros",
+    "type": "Tipo de operación",
+    "location": "Ubicación",
+    "ticket": "Tu inversión",
+    "ticketHint": "Muestra las oportunidades cuyo ticket mínimo puedes cubrir.",
+    "anyTicket": "Cualquier importe",
+    "upTo": "Hasta {amount}",
+    "sortedBy": "Destacadas primero, después las más recientes",
+    "emptyTitle": "No hay oportunidades con estos filtros",
+    "emptyBody": "Prueba a ampliar la ubicación o el importe.",
+    "pagination": {
+      "label": "Paginación",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "page": "Página {page} de {total}"
+    }
+  },
+  "geo": {
+    "community": "Comunidad autónoma",
+    "province": "Provincia",
+    "municipality": "Municipio",
+    "allCommunities": "Todas las comunidades",
+    "allProvinces": "Todas las provincias",
+    "allMunicipalities": "Todos los municipios",
+    "chooseCommunity": "Elige comunidad",
+    "chooseProvince": "Elige provincia",
+    "chooseMunicipality": "Elige municipio",
+    "chooseProvinceFirst": "Elige antes una provincia",
+    "searchMunicipality": "Buscar municipio…",
+    "noMunicipality": "No encontramos ese municipio."
+  },
+  "legal": {
+    "updated": "Última actualización: {date}",
+    "legalNotice": "Aviso legal",
+    "privacy": "Política de privacidad",
+    "cookies": "Política de cookies",
+    "terms": "Condiciones de uso y política de publicación"
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "body": "La página que buscas no existe o se ha movido.",
+    "cta": "Ir al inicio"
+  },
+  "errorPage": {
+    "title": "Se ha producido un error",
+    "body": "Hemos tenido un problema al cargar esta página."
+  },
+  "status": {
+    "published": "Publicada",
+    "withdrawn": "Retirada",
+    "removed": "Retirada por moderación",
+    "closed": "Cerrada"
+  },
+  "errors": {
+    "validation": "Revisa los campos marcados.",
+    "unexpected": "Algo ha ido mal. Inténtalo de nuevo en unos minutos.",
+    "unauthenticated": "Tu sesión ha caducado. Vuelve a iniciar sesión.",
+    "forbidden": "No tienes permiso para hacer esto.",
+    "notFound": "No encontramos lo que buscas.",
+    "invalid": "Valor no válido.",
+    "required": "Este campo es obligatorio.",
+    "integer": "Introduce un número entero.",
+    "positive": "Introduce un número mayor que cero.",
+    "phoneInvalid": "Introduce un teléfono válido (por ejemplo, +34 600 000 000).",
+    "phoneRequired": "Añade tu teléfono antes de publicar.",
+    "bookingUrlInvalid": "Usa un enlace de citas de Google Calendar (calendar.app.google o calendar.google.com).",
+    "bookingUrlRequired": "Si ocultas tu teléfono, añade un enlace para agendar citas.",
+    "titleTooShort": "El título debe tener al menos 10 caracteres.",
+    "titleTooLong": "El título no puede superar los 120 caracteres.",
+    "descriptionTooShort": "Describe la oportunidad con algo más de detalle (mínimo 80 caracteres).",
+    "descriptionInvalid": "La descripción contiene un formato no admitido.",
+    "amountTooLarge": "La cantidad es demasiado alta.",
+    "termTooLong": "El plazo máximo es de 360 meses.",
+    "percentTooHigh": "El porcentaje es demasiado alto.",
+    "minTicketTooHigh": "El ticket mínimo no puede superar el capital buscado.",
+    "rangeInverted": "El valor «hasta» debe ser mayor o igual que «desde».",
+    "municipalityRequired": "Elige el municipio del inmueble.",
+    "tooManyFiles": "Has superado el número máximo de archivos.",
+    "invalidUpload": "Uno de los archivos no es válido. Vuelve a subirlo.",
+    "fileType": "Tipo de archivo no permitido.",
+    "fileTooLarge": "El archivo es demasiado grande.",
+    "uploadFailed": "No se pudo subir el archivo.",
+    "removedByAdmin": "Esta oportunidad fue retirada por moderación y no se puede modificar.",
+    "ownOpportunity": "No puedes hacer esto con tu propia oportunidad.",
+    "reasonRequired": "Indica un motivo (mínimo 5 caracteres).",
+    "tooLong": "El texto es demasiado largo.",
+    "cannotBanSelf": "No puedes suspender tu propia cuenta."
+  },
+  "profile": {
+    "title": "Datos de contacto",
+    "description": "Así te contactarán los inversores registrados. Tu nombre y email (de tu cuenta) siempre son visibles para ellos.",
+    "phone": "Teléfono",
+    "phoneHint": "Obligatorio para publicar. Lo guardamos en tu cuenta de forma privada.",
+    "visibility": "¿Cómo quieres que te contacten?",
+    "visibilityOptions": {
+      "public": {
+        "title": "Mostrar mi teléfono",
+        "body": "Los inversores registrados verán tu número y podrán llamarte o escribirte por WhatsApp."
+      },
+      "hidden": {
+        "title": "Ocultar mi teléfono y ofrecer citas",
+        "body": "Tu número no se muestra; los inversores reservan una cita en tu Google Calendar."
+      }
+    },
+    "bookingUrl": "Enlace para agendar citas",
+    "bookingUrlHint": "Crea una «programación de citas» en Google Calendar y pega aquí su enlace público.",
+    "optional": "opcional",
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "saved": "Datos de contacto guardados",
+    "phoneRequiredNotice": "Para publicar una oportunidad, primero añade tu teléfono de contacto."
+  },
+  "uploads": {
+    "addPhotos": "Añadir fotos",
+    "photosHint": "Hasta {max} fotos. La primera es la portada. Las optimizamos automáticamente.",
+    "photoAlt": "Foto {index}",
+    "cover": "Portada",
+    "moveLeft": "Mover a la izquierda",
+    "moveRight": "Mover a la derecha",
+    "remove": "Quitar",
+    "addDocuments": "Adjuntar documentos",
+    "documentsHint": "Hasta {max} archivos (PDF, Word, Excel o imágenes, máx. 25 MB). Solo los usuarios registrados podrán descargarlos.",
+    "noDocuments": "Sin documentos adjuntos."
+  },
+  "editor": {
+    "toolbar": "Formato del texto",
+    "bold": "Negrita",
+    "italic": "Cursiva",
+    "heading2": "Encabezado",
+    "heading3": "Subencabezado",
+    "bulletList": "Lista",
+    "orderedList": "Lista numerada",
+    "quote": "Cita",
+    "link": "Enlace",
+    "linkPrompt": "Dirección del enlace (https://…)",
+    "undo": "Deshacer",
+    "redo": "Rehacer"
+  },
+  "opportunityForm": {
+    "createTitle": "Publicar oportunidad",
+    "createDescription": "Cuanto más completa sea la información, más inversores contactarán contigo.",
+    "createAsAdmin": "Como administrador, esta oportunidad se publicará como destacada.",
+    "editTitle": "Editar oportunidad",
+    "editDescription": "Los cambios se publican al guardar.",
+    "removedNotice": "Esta oportunidad fue retirada por moderación. Si crees que es un error, escríbenos.",
+    "sections": {
+      "basics": "Tipo y título",
+      "basicsHint": "Qué tipo de operación es y cómo se llama.",
+      "location": "Ubicación",
+      "locationHint": "Solo mostramos el municipio, nunca la dirección exacta.",
+      "figures": "Cifras",
+      "figuresHint": "Capital que buscas, ticket mínimo y plazos.",
+      "returns": "Rentabilidad esperada",
+      "returnsHint": "Valor fijo o rango, en términos totales y anuales.",
+      "description": "Descripción",
+      "descriptionHint": "Explica la operación, el inmueble, la estrategia y los riesgos.",
+      "photos": "Fotos",
+      "photosHint": "Fotos del inmueble o del terreno.",
+      "documents": "Documentación",
+      "documentsHint": "Nota simple, tasación, plan de negocio… Solo visible para usuarios registrados."
+    },
+    "type": "Tipo de operación",
+    "title": "Título",
+    "titleHint": "Por ejemplo: «Piso de 3 habitaciones para reformar en el centro de Málaga».",
+    "amountToRaise": "Capital buscado (€)",
+    "minTicket": "Ticket mínimo (€)",
+    "optionalHint": "Opcional.",
+    "termMonths": "Plazo de la operación (meses)",
+    "closesOn": "Fecha de cierre",
+    "closesOnHint": "Opcional. El anuncio dejará de mostrarse después de esta fecha.",
+    "returnKinds": {
+      "fixed": "Valor fijo",
+      "range": "Rango"
+    },
+    "nominalReturn": "Rentabilidad total (%)",
+    "nominalHint": "Sobre el capital invertido, para todo el plazo.",
+    "annualReturn": "Rentabilidad anual (%)",
+    "annualHint": "Se calcula a partir de la total y el plazo; puedes ajustarla.",
+    "value": "Valor",
+    "from": "Desde",
+    "to": "Hasta",
+    "description": "Descripción",
+    "legalNotice": "Al publicar declaras que la información es veraz y aceptas las condiciones de uso.",
+    "saving": "Guardando…",
+    "submitCreate": "Publicar oportunidad",
+    "submitEdit": "Guardar cambios",
+    "published": "¡Oportunidad publicada!",
+    "updated": "Cambios guardados",
+    "uploading": "Subiendo archivos…"
+  },
+  "interest": {
+    "cta": "Me interesa",
+    "active": "Te interesa",
+    "consent": "Al pulsar «Me interesa» compartes tu nombre y email con el promotor para que pueda contactarte.",
+    "activeHint": "El promotor puede ver tu nombre y email. Pulsa de nuevo para retirar tu interés.",
+    "added": "Hemos avisado al promotor de tu interés",
+    "removed": "Has retirado tu interés"
+  },
+  "report": {
+    "cta": "Denunciar anuncio",
+    "title": "Denunciar este anuncio",
+    "description": "Revisaremos el anuncio. El promotor no sabrá quién lo ha denunciado.",
+    "details": "Detalles (opcional)",
+    "cancel": "Cancelar",
+    "submit": "Enviar denuncia",
+    "sent": "Gracias, revisaremos el anuncio",
+    "reasons": {
+      "fraud": "Posible fraude o estafa",
+      "misleading": "Información falsa o engañosa",
+      "inappropriate": "Contenido inapropiado",
+      "duplicate": "Anuncio duplicado",
+      "other": "Otro motivo"
+    }
+  },
+  "panel": {
+    "title": "Mi panel",
+    "nav": {
+      "opportunities": "Mis oportunidades",
+      "new": "Publicar",
+      "interests": "Mis intereses",
+      "profile": "Datos de contacto"
+    },
+    "opportunities": {
+      "title": "Mis oportunidades",
+      "description": "Gestiona tus anuncios y consulta quién se ha interesado.",
+      "new": "Publicar oportunidad",
+      "emptyTitle": "Aún no has publicado ninguna oportunidad",
+      "emptyBody": "Publicar es gratis y solo lleva unos minutos.",
+      "publishedOn": "publicada el {date}",
+      "removedReason": "Motivo de la retirada: {reason}",
+      "interested": "{count, plural, =0 {Sin interesados} one {# interesado} other {# interesados}}",
+      "view": "Ver",
+      "edit": "Editar",
+      "withdraw": "Retirar",
+      "republish": "Volver a publicar",
+      "withdrawTitle": "¿Retirar esta oportunidad?",
+      "withdrawBody": "Dejará de mostrarse en el buscador. Podrás volver a publicarla cuando quieras.",
+      "cancel": "Cancelar",
+      "withdrawn": "Oportunidad retirada",
+      "republished": "Oportunidad publicada de nuevo"
+    },
+    "interested": {
+      "title": "Inversores interesados",
+      "back": "Volver a mis oportunidades",
+      "empty": "Todavía nadie ha pulsado «Me interesa» en esta oportunidad.",
+      "name": "Nombre",
+      "email": "Email",
+      "date": "Fecha",
+      "privacyNote": "Estos datos se comparten contigo solo para tratar esta oportunidad. No los uses para otros fines."
+    },
+    "interests": {
+      "title": "Mis intereses",
+      "description": "Oportunidades en las que has pulsado «Me interesa».",
+      "empty": "Todavía no has mostrado interés en ninguna oportunidad.",
+      "explore": "Explorar oportunidades",
+      "since": "desde el {date}"
+    }
+  },
+  "admin": {
+    "title": "Administración",
+    "nav": {
+      "dashboard": "Resumen",
+      "opportunities": "Oportunidades",
+      "reports": "Denuncias",
+      "users": "Usuarios",
+      "activity": "Actividad"
+    },
+    "common": {
+      "reason": "Motivo",
+      "reasonPlaceholder": "Explica brevemente el motivo…",
+      "reasonHint": "Queda registrado en la actividad. En las retiradas, el promotor verá este motivo.",
+      "cancel": "Cancelar"
+    },
+    "dashboard": {
+      "title": "Resumen",
+      "description": "Estado de la plataforma de un vistazo.",
+      "published": "Oportunidades publicadas",
+      "users": "Usuarios registrados",
+      "interests": "«Me interesa» (30 días)",
+      "openReports": "Denuncias pendientes",
+      "reportsPending": "{count, plural, one {Hay # denuncia pendiente de revisar} other {Hay # denuncias pendientes de revisar}}",
+      "reviewReports": "Revisar denuncias",
+      "publishFeatured": "Publicar oportunidad destacada",
+      "helpTitle": "¿Cómo se usa este panel?",
+      "helpBody": "Desde «Oportunidades» puedes ver, editar, destacar o retirar cualquier anuncio. En «Denuncias» revisas los avisos de los usuarios. En «Usuarios» puedes suspender cuentas que incumplan las condiciones. Todas las acciones quedan registradas en «Actividad»."
+    },
+    "opportunities": {
+      "title": "Oportunidades",
+      "description": "Todas las oportunidades, en cualquier estado.",
+      "searchPlaceholder": "Buscar por título…",
+      "search": "Buscar",
+      "filterByStatus": "Filtrar por estado",
+      "all": "Todas",
+      "opportunity": "Oportunidad",
+      "promoter": "Promotor",
+      "statusLabel": "Estado",
+      "empty": "No hay oportunidades con estos filtros.",
+      "featuredLabel": "Destacada",
+      "promoterBanned": "Promotor suspendido",
+      "actions": "Acciones",
+      "view": "Ver anuncio",
+      "edit": "Editar",
+      "feature": "Destacar",
+      "unfeature": "Quitar destacado",
+      "featured": "Oportunidad destacada",
+      "unfeatured": "Ya no está destacada",
+      "remove": "Retirar anuncio",
+      "removeTitle": "Retirar este anuncio",
+      "removeBody": "Dejará de mostrarse inmediatamente. El promotor verá el motivo en su panel y no podrá volver a publicarlo.",
+      "removed": "Anuncio retirado",
+      "restore": "Restaurar",
+      "restored": "Anuncio restaurado"
+    },
+    "users": {
+      "title": "Usuarios",
+      "description": "Usuarios que han usado la plataforma. Los datos personales vienen de Clerk.",
+      "user": "Usuario",
+      "opportunities": "Anuncios",
+      "joined": "Alta",
+      "statusLabel": "Estado",
+      "activeLabel": "Activo",
+      "bannedLabel": "Suspendido",
+      "ban": "Suspender",
+      "unban": "Reactivar",
+      "banTitle": "Suspender esta cuenta",
+      "banBody": "El usuario no podrá iniciar sesión y todos sus anuncios dejarán de mostrarse.",
+      "banned": "Cuenta suspendida",
+      "unbanned": "Cuenta reactivada"
+    },
+    "reports": {
+      "title": "Denuncias",
+      "description": "Avisos de usuarios pendientes de revisar.",
+      "empty": "No hay denuncias pendientes. ¡Todo en orden!",
+      "removeOpportunity": "Retirar anuncio",
+      "removeTitle": "Retirar el anuncio denunciado",
+      "removeBody": "El anuncio dejará de mostrarse y la denuncia quedará resuelta.",
+      "resolve": "Marcar como resuelta",
+      "dismiss": "Descartar",
+      "resolved": "Denuncia resuelta",
+      "dismissed": "Denuncia descartada"
+    },
+    "activity": {
+      "title": "Actividad",
+      "description": "Registro de todas las acciones de los administradores.",
+      "empty": "Todavía no hay actividad.",
+      "actions": {
+        "opportunity_remove": "retiró un anuncio",
+        "opportunity_restore": "restauró un anuncio",
+        "opportunity_feature": "destacó un anuncio",
+        "opportunity_unfeature": "quitó el destacado de un anuncio",
+        "user_ban": "suspendió una cuenta",
+        "user_unban": "reactivó una cuenta",
+        "report_resolve": "resolvió una denuncia",
+        "report_dismiss": "descartó una denuncia"
+      }
+    }
+  }
+}

@@ -1,0 +1,146 @@
+import { SparklesIcon } from "lucide-react";
+import type { Metadata } from "next";
+import Form from "next/form";
+import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+
+import { PageHeader } from "@/components/layout/page-header";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { OpportunityAdminActions } from "@/features/admin";
+import { adminListOpportunities } from "@/features/admin/server";
+import { StatusBadge, TypeBadge } from "@/features/opportunities";
+import { requireAdminPage } from "@/lib/auth";
+import { cn } from "@/lib/utils";
+
+const STATUSES = ["published", "withdrawn", "removed"] as const;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("admin.opportunities");
+  return { title: t("title"), robots: { index: false } };
+}
+
+export default async function AdminOpportunitiesPage({
+  searchParams,
+}: PageProps<"/admin/oportunidades">) {
+  const [, sp, t, tStatus] = await Promise.all([
+    requireAdminPage(),
+    searchParams,
+    getTranslations("admin.opportunities"),
+    getTranslations("status"),
+  ]);
+  const q = typeof sp.q === "string" ? sp.q.slice(0, 100) : undefined;
+  const status = STATUSES.find((s) => s === sp.estado);
+  const items = await adminListOpportunities({ q, status });
+
+  return (
+    <>
+      <PageHeader title={t("title")} description={t("description")} />
+      <div className="mb-6 flex flex-wrap items-center gap-3">
+        <Form action="/admin/oportunidades" className="flex flex-1 gap-2">
+          {status && <input type="hidden" name="estado" value={status} />}
+          <Input
+            name="q"
+            defaultValue={q}
+            placeholder={t("searchPlaceholder")}
+            className="max-w-sm"
+          />
+          <Button type="submit" variant="outline">
+            {t("search")}
+          </Button>
+        </Form>
+        <nav className="flex gap-1" aria-label={t("filterByStatus")}>
+          <Link
+            href={{ pathname: "/admin/oportunidades", query: q ? { q } : {} }}
+            className={cn(
+              "rounded-full px-3 py-1 text-sm",
+              !status ? "bg-primary text-primary-foreground" : "hover:bg-accent",
+            )}
+          >
+            {t("all")}
+          </Link>
+          {STATUSES.map((s) => (
+            <Link
+              key={s}
+              href={{ pathname: "/admin/oportunidades", query: { ...(q ? { q } : {}), estado: s } }}
+              className={cn(
+                "rounded-full px-3 py-1 text-sm",
+                status === s ? "bg-primary text-primary-foreground" : "hover:bg-accent",
+              )}
+            >
+              {tStatus(s)}
+            </Link>
+          ))}
+        </nav>
+      </div>
+
+      <div className="overflow-x-auto rounded-xl border bg-card">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t("opportunity")}</TableHead>
+              <TableHead>{t("promoter")}</TableHead>
+              <TableHead>{t("statusLabel")}</TableHead>
+              <TableHead className="w-12" />
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {items.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={4} className="py-10 text-center text-muted-foreground">
+                  {t("empty")}
+                </TableCell>
+              </TableRow>
+            )}
+            {items.map((o) => (
+              <TableRow key={o.id}>
+                <TableCell className="max-w-md">
+                  <div className="flex items-center gap-2">
+                    <TypeBadge type={o.type} className="bg-secondary shadow-none" />
+                    {o.isFeatured && (
+                      <SparklesIcon
+                        className="size-4 text-highlight-strong"
+                        aria-label={t("featuredLabel")}
+                      />
+                    )}
+                  </div>
+                  <p className="mt-1 truncate font-medium">{o.title}</p>
+                  <p className="text-xs text-muted-foreground">{o.municipality}</p>
+                </TableCell>
+                <TableCell>
+                  <p className="text-sm">{o.promoter.name}</p>
+                  <p className="text-xs text-muted-foreground">{o.promoter.email}</p>
+                  {o.promoterStatus === "banned" && (
+                    <p className="text-xs text-destructive">{t("promoterBanned")}</p>
+                  )}
+                </TableCell>
+                <TableCell>
+                  <StatusBadge status={o.status} isClosed={o.isClosed} />
+                  {o.removedReason && (
+                    <p className="mt-1 max-w-48 text-xs text-muted-foreground">{o.removedReason}</p>
+                  )}
+                </TableCell>
+                <TableCell>
+                  <OpportunityAdminActions
+                    id={o.id}
+                    slug={o.slug}
+                    status={o.status}
+                    isFeatured={o.isFeatured}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </>
+  );
+}

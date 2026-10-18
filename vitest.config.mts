@@ -27,6 +27,7 @@ export default defineConfig({
         test: {
           name: "unit",
           include: ["src/**/*.test.{ts,tsx}"],
+          exclude: ["**/*.int.test.ts", "**/node_modules/**"],
           environment: "jsdom",
           setupFiles: ["./tests/setup-unit.ts"],
           env: { SKIP_ENV_VALIDATION: "1" },
