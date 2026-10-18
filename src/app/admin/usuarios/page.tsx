@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { Suspense } from "react";
 
 import { PageHeader } from "@/components/layout/page-header";
+import { PageSkeleton } from "@/components/layout/page-skeleton";
 import {
   Table,
   TableBody,
@@ -20,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("title"), robots: { index: false } };
 }
 
-export default async function AdminUsersPage() {
+async function AdminUsersPageContent() {
   const viewer = await requireAdminPage();
   const [users, t] = await Promise.all([adminListUsers(), getTranslations("admin.users")]);
   return (
@@ -73,5 +75,17 @@ export default async function AdminUsersPage() {
         </Table>
       </div>
     </>
+  );
+}
+
+/**
+ * Reads the session/DB at request time: streamed inside the page's own <Suspense> so
+ * navigations between sibling pages stay instant (loading.tsx doesn't cover them).
+ */
+export default function AdminUsersPage() {
+  return (
+    <Suspense fallback={<PageSkeleton />}>
+      <AdminUsersPageContent />
+    </Suspense>
   );
 }

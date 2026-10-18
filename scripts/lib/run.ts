@@ -1,5 +1,5 @@
 import { spawn } from "node:child_process";
-import { createServer } from "node:net";
+import { connect } from "node:net";
 
 /** Runs a command inheriting stdio; rejects on non-zero exit. */
 export function run(command: string, args: string[], env: NodeJS.ProcessEnv = process.env) {
@@ -17,13 +17,29 @@ export function run(command: string, args: string[], env: NodeJS.ProcessEnv = pr
   });
 }
 
-function isPortFree(port: number) {
+/** True if something accepts connections on host:port. */
+function isListening(port: number, host: string) {
   return new Promise<boolean>((resolve) => {
-    const server = createServer()
-      .once("error", () => resolve(false))
-      .once("listening", () => server.close(() => resolve(true)))
-      .listen(port, "0.0.0.0");
+    const socket = connect({ port, host })
+      .once("connect", () => {
+        socket.destroy();
+        resolve(true);
+      })
+      .once("error", () => resolve(false));
+    socket.setTimeout(500, () => {
+      socket.destroy();
+      resolve(false);
+    });
   });
+}
+
+/**
+ * Probing with listen() is unreliable on Windows (binding 0.0.0.0 can succeed while another
+ * process listens on the same port), so check whether anything answers on IPv4 or IPv6.
+ */
+async function isPortFree(port: number) {
+  const [v4, v6] = await Promise.all([isListening(port, "127.0.0.1"), isListening(port, "::1")]);
+  return !v4 && !v6;
 }
 
 /** First free port starting at `start` (inclusive). */

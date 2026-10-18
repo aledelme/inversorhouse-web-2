@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { Suspense } from "react";
 
 import { PageHeader } from "@/components/layout/page-header";
+import { PageSkeleton } from "@/components/layout/page-skeleton";
 import { listAuditLog } from "@/features/admin/server";
 import { requireAdminPage } from "@/lib/auth";
 import { formatDateShort } from "@/lib/format";
@@ -11,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("title"), robots: { index: false } };
 }
 
-export default async function AdminActivityPage() {
+async function AdminActivityPageContent() {
   await requireAdminPage();
   const [entries, t] = await Promise.all([listAuditLog(), getTranslations("admin.activity")]);
   return (
@@ -41,5 +43,17 @@ export default async function AdminActivityPage() {
         </ol>
       )}
     </>
+  );
+}
+
+/**
+ * Reads the session/DB at request time: streamed inside the page's own <Suspense> so
+ * navigations between sibling pages stay instant (loading.tsx doesn't cover them).
+ */
+export default function AdminActivityPage() {
+  return (
+    <Suspense fallback={<PageSkeleton />}>
+      <AdminActivityPageContent />
+    </Suspense>
   );
 }

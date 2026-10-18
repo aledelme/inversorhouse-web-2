@@ -29,6 +29,7 @@ async function main() {
     R2_ACCESS_KEY_ID: "inversorhouse",
     R2_SECRET_ACCESS_KEY: "inversorhouse-secret",
     ADMIN_EMAILS: E2E_USERS.admin.email,
+    EXPOSE_TESTING_API: "1",
   });
   assertLocalServices("e2e server", { allowOverride: false });
 

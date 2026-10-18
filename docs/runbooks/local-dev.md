@@ -36,6 +36,11 @@ en `ADMIN_EMAILS`.
 | Comprobación rápida                             | `pnpm verify`                                 |
 | Batería completa (obligatoria tras cada cambio) | `pnpm verify:full`                            |
 
+## Un solo `pnpm dev` por proyecto
+
+Next 16 no permite dos servidores de desarrollo del mismo proyecto a la vez: si ya hay uno, el
+segundo te indica su URL y su PID. `pnpm prod:local` y los e2e sí pueden convivir con `pnpm dev`.
+
 ## Puertos
 
 | Servicio                   | Puerto             | Variable para cambiarlo            |

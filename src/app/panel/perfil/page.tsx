@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { Suspense } from "react";
 
 import { PageHeader } from "@/components/layout/page-header";
+import { PageSkeleton } from "@/components/layout/page-skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ContactSettingsForm } from "@/features/promoter-profile";
 import { getContactSettings } from "@/features/promoter-profile/server";
@@ -12,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("title"), robots: { index: false } };
 }
 
-export default async function ProfilePage({ searchParams }: PageProps<"/panel/perfil">) {
+async function ProfilePageContent({ searchParams }: PageProps<"/panel/perfil">) {
   const [viewer, { next }, t] = await Promise.all([
     requireUserPage(),
     searchParams,
@@ -34,5 +36,17 @@ export default async function ProfilePage({ searchParams }: PageProps<"/panel/pe
         next={comingFromPublish ? "/panel/oportunidades/nueva" : undefined}
       />
     </div>
+  );
+}
+
+/**
+ * Reads the session/DB at request time: streamed inside the page's own <Suspense> so
+ * navigations between sibling pages stay instant (loading.tsx doesn't cover them).
+ */
+export default function ProfilePage(props: PageProps<"/panel/perfil">) {
+  return (
+    <Suspense fallback={<PageSkeleton />}>
+      <ProfilePageContent {...props} />
+    </Suspense>
   );
 }

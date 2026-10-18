@@ -3,8 +3,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { Suspense } from "react";
 
 import { PageHeader } from "@/components/layout/page-header";
+import { PageSkeleton } from "@/components/layout/page-skeleton";
 import {
   Table,
   TableBody,
@@ -23,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("title"), robots: { index: false } };
 }
 
-export default async function InterestedPage({
+async function InterestedPageContent({
   params,
 }: PageProps<"/panel/oportunidades/[id]/interesados">) {
   const [viewer, { id }, t] = await Promise.all([
@@ -95,5 +97,17 @@ export default async function InterestedPage({
       )}
       <p className="mt-4 text-xs text-muted-foreground">{t("privacyNote")}</p>
     </>
+  );
+}
+
+/**
+ * Reads the session/DB at request time: streamed inside the page's own <Suspense> so
+ * navigations between sibling pages stay instant (loading.tsx doesn't cover them).
+ */
+export default function InterestedPage(props: PageProps<"/panel/oportunidades/[id]/interesados">) {
+  return (
+    <Suspense fallback={<PageSkeleton />}>
+      <InterestedPageContent {...props} />
+    </Suspense>
   );
 }

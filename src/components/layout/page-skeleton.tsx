@@ -1,6 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function PanelLoading() {
+/** Placeholder for panel/admin pages while their request-time content streams in. */
+export function PageSkeleton() {
   return (
     <div className="space-y-4" aria-busy>
       <Skeleton className="h-10 w-64" />

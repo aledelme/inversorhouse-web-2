@@ -20,6 +20,11 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   typedRoutes: true,
   poweredByHeader: false,
+  experimental: {
+    // Only the e2e build (scripts/e2e-server.ts) exposes the instant-navigation testing API
+    // used by @next/playwright's instant(). Never enabled in real deployments.
+    exposeTestingApiInProductionBuild: process.env.EXPOSE_TESTING_API === "1",
+  },
   turbopack: {
     rules: {
       "*.css": {

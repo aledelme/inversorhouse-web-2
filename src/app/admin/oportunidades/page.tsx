@@ -3,8 +3,10 @@ import type { Metadata } from "next";
 import Form from "next/form";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { Suspense } from "react";
 
 import { PageHeader } from "@/components/layout/page-header";
+import { PageSkeleton } from "@/components/layout/page-skeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -28,9 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("title"), robots: { index: false } };
 }
 
-export default async function AdminOpportunitiesPage({
-  searchParams,
-}: PageProps<"/admin/oportunidades">) {
+async function AdminOpportunitiesPageContent({ searchParams }: PageProps<"/admin/oportunidades">) {
   const [, sp, t, tStatus] = await Promise.all([
     requireAdminPage(),
     searchParams,
@@ -142,5 +142,17 @@ export default async function AdminOpportunitiesPage({
         </Table>
       </div>
     </>
+  );
+}
+
+/**
+ * Reads the session/DB at request time: streamed inside the page's own <Suspense> so
+ * navigations between sibling pages stay instant (loading.tsx doesn't cover them).
+ */
+export default function AdminOpportunitiesPage(props: PageProps<"/admin/oportunidades">) {
+  return (
+    <Suspense fallback={<PageSkeleton />}>
+      <AdminOpportunitiesPageContent {...props} />
+    </Suspense>
   );
 }

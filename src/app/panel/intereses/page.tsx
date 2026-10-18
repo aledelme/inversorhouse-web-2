@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { Suspense } from "react";
 
 import { PageHeader } from "@/components/layout/page-header";
+import { PageSkeleton } from "@/components/layout/page-skeleton";
 import { Button } from "@/components/ui/button";
 import { routes } from "@/config/navigation";
 import { listMyInterests } from "@/features/interests/server";
@@ -15,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("title"), robots: { index: false } };
 }
 
-export default async function MyInterestsPage() {
+async function MyInterestsPageContent() {
   const viewer = await requireUserPage();
   const [items, t] = await Promise.all([
     listMyInterests(viewer.userId),
@@ -58,5 +60,17 @@ export default async function MyInterestsPage() {
         </ul>
       )}
     </>
+  );
+}
+
+/**
+ * Reads the session/DB at request time: streamed inside the page's own <Suspense> so
+ * navigations between sibling pages stay instant (loading.tsx doesn't cover them).
+ */
+export default function MyInterestsPage() {
+  return (
+    <Suspense fallback={<PageSkeleton />}>
+      <MyInterestsPageContent />
+    </Suspense>
   );
 }

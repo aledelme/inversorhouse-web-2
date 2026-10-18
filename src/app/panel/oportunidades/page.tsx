@@ -2,8 +2,10 @@ import { EyeIcon, PencilIcon, PlusIcon, UsersIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { Suspense } from "react";
 
 import { PageHeader } from "@/components/layout/page-header";
+import { PageSkeleton } from "@/components/layout/page-skeleton";
 import { Button } from "@/components/ui/button";
 import { routes } from "@/config/navigation";
 import { StatusBadge, StatusToggle, TypeBadge } from "@/features/opportunities";
@@ -16,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("title"), robots: { index: false } };
 }
 
-export default async function MyOpportunitiesPage() {
+async function MyOpportunitiesPageContent() {
   const viewer = await requireUserPage();
   const [items, t] = await Promise.all([
     listOwnOpportunities(viewer.userId),
@@ -100,5 +102,17 @@ export default async function MyOpportunitiesPage() {
         </ul>
       )}
     </>
+  );
+}
+
+/**
+ * Reads the session/DB at request time: streamed inside the page's own <Suspense> so
+ * navigations between sibling pages stay instant (loading.tsx doesn't cover them).
+ */
+export default function MyOpportunitiesPage() {
+  return (
+    <Suspense fallback={<PageSkeleton />}>
+      <MyOpportunitiesPageContent />
+    </Suspense>
   );
 }

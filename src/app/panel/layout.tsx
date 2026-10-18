@@ -61,7 +61,7 @@ export default async function PanelLayout({ children }: LayoutProps<"/panel">) {
         <aside className="space-y-2">
           <p className="hidden px-3 pb-2 eyebrow lg:block">{t("title")}</p>
           <SectionNav items={[...items]} label={t("title")} />
-          <Suspense>
+          <Suspense fallback={null}>
             <AdminLink />
           </Suspense>
         </aside>

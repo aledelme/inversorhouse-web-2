@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { Suspense } from "react";
 
 import { PageHeader } from "@/components/layout/page-header";
+import { PageSkeleton } from "@/components/layout/page-skeleton";
 import { ReportAdminActions } from "@/features/admin";
 import { StatusBadge } from "@/features/opportunities";
 import { listReports } from "@/features/reports/server";
@@ -14,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("title"), robots: { index: false } };
 }
 
-export default async function AdminReportsPage() {
+async function AdminReportsPageContent() {
   await requireAdminPage();
   const [reports, t, tReasons] = await Promise.all([
     listReports("open"),
@@ -66,5 +68,17 @@ export default async function AdminReportsPage() {
         </ul>
       )}
     </>
+  );
+}
+
+/**
+ * Reads the session/DB at request time: streamed inside the page's own <Suspense> so
+ * navigations between sibling pages stay instant (loading.tsx doesn't cover them).
+ */
+export default function AdminReportsPage() {
+  return (
+    <Suspense fallback={<PageSkeleton />}>
+      <AdminReportsPageContent />
+    </Suspense>
   );
 }
