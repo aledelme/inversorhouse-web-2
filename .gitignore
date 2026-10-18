@@ -39,3 +39,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# allow the documented template
+!.env.example
+
+# tests
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/tests/e2e/.auth/
+
+# local tooling
+.clerk/
+/drizzle-studio/

@@ -1,0 +1,6 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": ["scripts/**/*.ts", "src/db/seed/**/*.ts", "tests/**/*.ts", "drizzle.config.ts"],
+  "project": ["src/**/*.{ts,tsx}", "scripts/**/*.ts", "tests/**/*.ts"],
+  "ignoreDependencies": ["@tailwindcss/turbopack", "babel-plugin-react-compiler"]
+}

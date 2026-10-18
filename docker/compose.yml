@@ -1,0 +1,76 @@
+# Local services for development and tests. Never used in production.
+# Ports avoid 5432/5433/9000/9001 (taken by other local projects) and can be
+# overridden with IH_* variables in your shell or a docker/.env file.
+name: inversorhouse
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: inversorhouse
+      POSTGRES_PASSWORD: inversorhouse
+      POSTGRES_DB: inversorhouse_dev
+    ports:
+      - "${IH_PG_PORT:-5442}:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U inversorhouse -d inversorhouse_dev"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  # Throw-away database for integration and e2e tests (data lives in RAM).
+  postgres-test:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: inversorhouse
+      POSTGRES_PASSWORD: inversorhouse
+      POSTGRES_DB: inversorhouse_test
+    ports:
+      - "${IH_PG_TEST_PORT:-5443}:5432"
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U inversorhouse -d inversorhouse_test"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  # S3-compatible stand-in for Cloudflare R2.
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: inversorhouse
+      MINIO_ROOT_PASSWORD: inversorhouse-secret
+    ports:
+      - "${IH_S3_PORT:-9010}:9000"
+      - "${IH_S3_CONSOLE_PORT:-9011}:9001"
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  # Creates the buckets once MinIO is up. Mirrors the R2 setup:
+  # a public bucket for photos and a private one for documents.
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 inversorhouse inversorhouse-secret &&
+      for b in inversorhouse-public inversorhouse-private inversorhouse-test-public inversorhouse-test-private; do mc mb --ignore-existing local/$$b; done &&
+      mc anonymous set download local/inversorhouse-public &&
+      mc anonymous set download local/inversorhouse-test-public
+      "
+    restart: "no"
+
+volumes:
+  pg-data:
+  minio-data:

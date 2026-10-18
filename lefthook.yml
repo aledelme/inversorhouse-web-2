@@ -1,0 +1,24 @@
+# Git hooks (local only — there is no CI, see ADR-0008).
+# Skip in an emergency with LEFTHOOK=0 git commit ...
+pre-commit:
+  parallel: true
+  jobs:
+    - name: eslint
+      glob: "*.{ts,tsx,mjs,js}"
+      run: pnpm eslint --max-warnings=0 {staged_files}
+    - name: prettier
+      glob: "*.{ts,tsx,mjs,js,json,md,css,yml,yaml}"
+      run: pnpm prettier --check {staged_files}
+    - name: typecheck
+      glob: "*.{ts,tsx}"
+      run: pnpm tsc --noEmit
+
+commit-msg:
+  jobs:
+    - name: commitlint
+      run: pnpm commitlint --edit {1}
+
+pre-push:
+  jobs:
+    - name: verify
+      run: pnpm verify
