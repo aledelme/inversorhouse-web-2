@@ -13,7 +13,10 @@ export function Logo({ onDark = false, className, priority = false }: Props) {
     <Link
       href="/"
       aria-label={brand.name}
-      className={cn("group inline-flex items-center gap-2.5 rounded-md", className)}
+      className={cn(
+        "group inline-flex shrink-0 items-center gap-2 rounded-md sm:gap-2.5",
+        className,
+      )}
     >
       <Image
         src={onDark ? logo.markOnDark : logo.mark}
@@ -28,7 +31,7 @@ export function Logo({ onDark = false, className, priority = false }: Props) {
         alt=""
         width={logo.wordmarkSize.width}
         height={logo.wordmarkSize.height}
-        className="h-3.5 w-auto"
+        className="h-3 w-auto sm:h-3.5"
         preload={priority}
       />
     </Link>

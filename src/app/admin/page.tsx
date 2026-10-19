@@ -44,11 +44,11 @@ async function AdminDashboardContent() {
           </Button>
         }
       />
-      <dl className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <dl className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
         {cards.map((card) => (
-          <div key={card.label} className="rounded-xl border bg-card p-5 shadow-soft">
-            <dt className="text-sm text-muted-foreground">{card.label}</dt>
-            <dd className="mt-1 font-display text-4xl text-primary">{card.value}</dd>
+          <div key={card.label} className="rounded-xl border bg-card p-4 shadow-soft sm:p-5">
+            <dt className="text-xs text-muted-foreground sm:text-sm">{card.label}</dt>
+            <dd className="mt-1 font-display text-3xl text-primary sm:text-4xl">{card.value}</dd>
           </div>
         ))}
       </dl>

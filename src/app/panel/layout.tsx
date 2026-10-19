@@ -57,13 +57,13 @@ export default async function PanelLayout({ children }: LayoutProps<"/panel">) {
   return (
     <>
       <SiteHeader />
-      <div className="container-page grid flex-1 gap-8 py-8 lg:grid-cols-[220px_1fr] lg:py-12">
-        <aside className="space-y-2">
-          <p className="hidden px-3 pb-2 eyebrow lg:block">{t("title")}</p>
-          <SectionNav items={[...items]} label={t("title")} />
-          <Suspense fallback={null}>
-            <AdminLink />
-          </Suspense>
+      <div className="container-page grid flex-1 content-start gap-6 py-6 lg:grid-cols-[220px_1fr] lg:gap-8 lg:py-12">
+        <aside>
+          <SectionNav items={[...items]} title={t("title")}>
+            <Suspense fallback={null}>
+              <AdminLink />
+            </Suspense>
+          </SectionNav>
         </aside>
         <main id="contenido" className="min-w-0">
           {children}

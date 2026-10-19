@@ -39,7 +39,7 @@ async function MyInterestsPageContent() {
           {items.map((item) => (
             <li key={item.opportunityId} className="flex flex-wrap items-center gap-3 p-4">
               <TypeBadge type={item.type} className="bg-secondary shadow-none" />
-              <div className="min-w-0 flex-1">
+              <div className="min-w-0 flex-1 wrap-break-word">
                 {item.status === "published" ? (
                   <Link
                     href={`/oportunidades/${item.slug}`}

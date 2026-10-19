@@ -29,7 +29,7 @@ async function AdminUsersPageContent() {
     <>
       <PageHeader title={t("title")} description={t("description")} />
       <div className="overflow-x-auto rounded-xl border bg-card">
-        <Table>
+        <Table stackOnMobile>
           <TableHeader>
             <TableRow>
               <TableHead>{t("user")}</TableHead>
@@ -41,30 +41,37 @@ async function AdminUsersPageContent() {
           </TableHeader>
           <TableBody>
             {users.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell>
+              <TableRow
+                key={user.id}
+                className="max-md:grid-cols-[auto_auto_minmax(0,1fr)] max-md:gap-x-4 max-md:text-xs"
+              >
+                <TableCell className="max-md:col-span-3 max-md:text-sm">
                   <p className="font-medium">{user.name}</p>
-                  <p className="text-xs text-muted-foreground">{user.email}</p>
+                  <p className="text-xs break-all text-muted-foreground">{user.email}</p>
                 </TableCell>
-                <TableCell>{user.opportunityCount}</TableCell>
-                <TableCell className="text-muted-foreground">
+                <TableCell className="max-md:row-start-2">
+                  <span className="text-muted-foreground md:hidden">{t("opportunities")}: </span>
+                  {user.opportunityCount}
+                </TableCell>
+                <TableCell className="text-muted-foreground max-md:row-start-2">
+                  <span className="md:hidden">{t("joined")}: </span>
                   {formatDateShort(user.createdAt)}
                 </TableCell>
-                <TableCell>
+                <TableCell className="max-md:row-start-2 max-md:text-right">
                   {user.status === "banned" ? (
-                    <span className="text-sm text-destructive">
+                    <span className="text-sm text-destructive max-md:text-xs">
                       {t("bannedLabel")}
                       {user.bannedReason && (
-                        <span className="block text-xs text-muted-foreground">
+                        <span className="block text-xs whitespace-normal text-muted-foreground">
                           {user.bannedReason}
                         </span>
                       )}
                     </span>
                   ) : (
-                    <span className="text-sm text-success">{t("activeLabel")}</span>
+                    <span className="text-sm text-success max-md:text-xs">{t("activeLabel")}</span>
                   )}
                 </TableCell>
-                <TableCell className="text-right">
+                <TableCell className="text-right max-md:col-span-3 max-md:text-left max-md:empty:hidden">
                   {user.id !== viewer.userId && (
                     <UserAdminActions userId={user.id} banned={user.status === "banned"} />
                   )}

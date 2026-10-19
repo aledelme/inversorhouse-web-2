@@ -79,7 +79,7 @@ export function Gallery({ images, title }: { images: GalleryImage[]; title: stri
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-5xl border-none bg-black/95 p-2 text-white sm:max-w-5xl">
+        <DialogContent className="max-w-[calc(100%-1rem)] border-none bg-black/95 p-2 text-white sm:max-w-5xl">
           <DialogTitle className="sr-only">{t("gallery")}</DialogTitle>
           <div className="relative aspect-[3/2] w-full">
             <Image

@@ -58,7 +58,7 @@ export async function SearchResults({ searchParams }: Props) {
           >
             <Link href={pageHref(Math.max(1, result.page - 1))} scroll>
               <ChevronLeftIcon />
-              {t("pagination.previous")}
+              <span className="sr-only sm:not-sr-only">{t("pagination.previous")}</span>
             </Link>
           </Button>
           <span className="text-sm text-muted-foreground">
@@ -73,7 +73,7 @@ export async function SearchResults({ searchParams }: Props) {
             }
           >
             <Link href={pageHref(Math.min(result.pageCount, result.page + 1))} scroll>
-              {t("pagination.next")}
+              <span className="sr-only sm:not-sr-only">{t("pagination.next")}</span>
               <ChevronRightIcon />
             </Link>
           </Button>

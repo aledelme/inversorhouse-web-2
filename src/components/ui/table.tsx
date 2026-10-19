@@ -3,12 +3,25 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-function Table({ className, ...props }: React.ComponentProps<"table">) {
+/**
+ * `stackOnMobile`: below `md` the header is hidden and each row becomes a grid "card"
+ * (cells unpadded and wrapping); pages place their cells with `max-md:` grid classes.
+ */
+function Table({
+  className,
+  stackOnMobile = false,
+  ...props
+}: React.ComponentProps<"table"> & { stackOnMobile?: boolean }) {
   return (
     <div data-slot="table-container" className="relative w-full overflow-x-auto">
       <table
         data-slot="table"
-        className={cn("w-full caption-bottom text-sm", className)}
+        className={cn(
+          "w-full caption-bottom text-sm",
+          stackOnMobile &&
+            "max-md:block max-md:[&_tbody]:block max-md:[&_td]:p-0 max-md:[&_td]:whitespace-normal max-md:[&_thead]:hidden max-md:[&_tr]:grid max-md:[&_tr]:gap-x-3 max-md:[&_tr]:gap-y-2 max-md:[&_tr]:p-4",
+          className,
+        )}
         {...props}
       />
     </div>

@@ -82,7 +82,7 @@ async function OpportunityDetail({ params }: { params: Params }) {
           <TypeBadge type={o.type} className="bg-secondary shadow-none" />
           {o.isFeatured && <FeaturedBadge />}
         </div>
-        <h1 className="max-w-4xl text-3xl leading-tight sm:text-5xl">{o.title}</h1>
+        <h1 className="max-w-4xl text-3xl leading-tight wrap-break-word sm:text-5xl">{o.title}</h1>
         <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
           <span className="inline-flex items-center gap-1.5">
             <MapPinIcon className="size-4" />
@@ -105,7 +105,8 @@ async function OpportunityDetail({ params }: { params: Params }) {
           </Suspense>
         </div>
 
-        <aside className="lg:row-span-2">
+        {/* On mobile the key figures and contact come right after the gallery. */}
+        <aside className="max-lg:order-first lg:row-span-2">
           <div className="space-y-6 lg:sticky lg:top-24">
             <div className="rounded-2xl border bg-card p-6 shadow-soft">
               <KeyFigures opportunity={o} />

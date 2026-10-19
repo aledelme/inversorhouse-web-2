@@ -28,7 +28,7 @@ async function AdminActivityPageContent() {
           {entries.map((entry) => (
             <li
               key={entry.id}
-              className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-5 py-3 text-sm"
+              className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-4 py-3 text-sm sm:px-5"
             >
               <span className="text-xs text-muted-foreground tabular-nums">
                 {formatDateShort(entry.createdAt)}
@@ -36,7 +36,9 @@ async function AdminActivityPageContent() {
               <span className="font-medium">{entry.actor}</span>
               <span>{t(`actions.${entry.action.replace(".", "_") as "user_ban"}`)}</span>
               {typeof entry.details?.reason === "string" && (
-                <span className="text-muted-foreground">— {entry.details.reason}</span>
+                <span className="min-w-0 wrap-break-word text-muted-foreground">
+                  — {entry.details.reason}
+                </span>
               )}
             </li>
           ))}

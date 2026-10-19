@@ -10,6 +10,15 @@ test.describe("public marketplace", () => {
     await expect(page.locator("article").first()).toBeVisible();
   });
 
+  test("the page never scrolls sideways", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.getByRole("link", { name: "Acceder" })).toBeVisible();
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+
   test("search filters by operation type through the URL", async ({ page }) => {
     await page.goto("/oportunidades?tipo=NPL");
     await expect(page.getByRole("status")).toHaveText(/\d+ oportunidad/);

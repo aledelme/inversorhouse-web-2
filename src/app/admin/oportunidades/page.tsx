@@ -45,23 +45,23 @@ async function AdminOpportunitiesPageContent({ searchParams }: PageProps<"/admin
     <>
       <PageHeader title={t("title")} description={t("description")} />
       <div className="mb-6 flex flex-wrap items-center gap-3">
-        <Form action="/admin/oportunidades" className="flex flex-1 gap-2">
+        <Form action="/admin/oportunidades" className="flex w-full gap-2 sm:w-auto sm:flex-1">
           {status && <input type="hidden" name="estado" value={status} />}
           <Input
             name="q"
             defaultValue={q}
             placeholder={t("searchPlaceholder")}
-            className="max-w-sm"
+            className="sm:max-w-sm"
           />
           <Button type="submit" variant="outline">
             {t("search")}
           </Button>
         </Form>
-        <nav className="flex gap-1" aria-label={t("filterByStatus")}>
+        <nav className="flex flex-wrap gap-1" aria-label={t("filterByStatus")}>
           <Link
             href={{ pathname: "/admin/oportunidades", query: q ? { q } : {} }}
             className={cn(
-              "rounded-full px-3 py-1 text-sm",
+              "rounded-full px-3 py-1.5 text-sm",
               !status ? "bg-primary text-primary-foreground" : "hover:bg-accent",
             )}
           >
@@ -72,7 +72,7 @@ async function AdminOpportunitiesPageContent({ searchParams }: PageProps<"/admin
               key={s}
               href={{ pathname: "/admin/oportunidades", query: { ...(q ? { q } : {}), estado: s } }}
               className={cn(
-                "rounded-full px-3 py-1 text-sm",
+                "rounded-full px-3 py-1.5 text-sm",
                 status === s ? "bg-primary text-primary-foreground" : "hover:bg-accent",
               )}
             >
@@ -83,7 +83,7 @@ async function AdminOpportunitiesPageContent({ searchParams }: PageProps<"/admin
       </div>
 
       <div className="overflow-x-auto rounded-xl border bg-card">
-        <Table>
+        <Table stackOnMobile>
           <TableHeader>
             <TableRow>
               <TableHead>{t("opportunity")}</TableHead>
@@ -101,8 +101,8 @@ async function AdminOpportunitiesPageContent({ searchParams }: PageProps<"/admin
               </TableRow>
             )}
             {items.map((o) => (
-              <TableRow key={o.id}>
-                <TableCell className="max-w-md">
+              <TableRow key={o.id} className="max-md:grid-cols-[minmax(0,1fr)_auto]">
+                <TableCell className="max-w-md max-md:max-w-none">
                   <div className="flex items-center gap-2">
                     <TypeBadge type={o.type} className="bg-secondary shadow-none" />
                     {o.isFeatured && (
@@ -112,23 +112,27 @@ async function AdminOpportunitiesPageContent({ searchParams }: PageProps<"/admin
                       />
                     )}
                   </div>
-                  <p className="mt-1 truncate font-medium">{o.title}</p>
+                  <p className="mt-1 truncate font-medium max-md:wrap-break-word max-md:whitespace-normal">
+                    {o.title}
+                  </p>
                   <p className="text-xs text-muted-foreground">{o.municipality}</p>
                 </TableCell>
-                <TableCell>
+                <TableCell className="max-md:col-span-2 max-md:row-start-2">
                   <p className="text-sm">{o.promoter.name}</p>
-                  <p className="text-xs text-muted-foreground">{o.promoter.email}</p>
+                  <p className="text-xs break-all text-muted-foreground">{o.promoter.email}</p>
                   {o.promoterStatus === "banned" && (
                     <p className="text-xs text-destructive">{t("promoterBanned")}</p>
                   )}
                 </TableCell>
-                <TableCell>
+                <TableCell className="max-md:col-span-2 max-md:row-start-3">
                   <StatusBadge status={o.status} isClosed={o.isClosed} />
                   {o.removedReason && (
-                    <p className="mt-1 max-w-48 text-xs text-muted-foreground">{o.removedReason}</p>
+                    <p className="mt-1 max-w-48 text-xs whitespace-normal text-muted-foreground max-md:max-w-none">
+                      {o.removedReason}
+                    </p>
                   )}
                 </TableCell>
-                <TableCell>
+                <TableCell className="max-md:col-start-2 max-md:row-start-1 max-md:self-start">
                   <OpportunityAdminActions
                     id={o.id}
                     slug={o.slug}

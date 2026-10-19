@@ -102,7 +102,7 @@
 /* Typography for user-written rich text (opportunity descriptions). */
 @layer components {
   .rich-text {
-    @apply space-y-4 text-[0.975rem] leading-relaxed text-foreground/90;
+    @apply space-y-4 text-[0.975rem] leading-relaxed wrap-anywhere text-foreground/90;
   }
   .rich-text h2 {
     @apply pt-2 text-2xl text-foreground;

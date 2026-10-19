@@ -39,7 +39,7 @@ export function MobileFilters({ children }: { children: React.ReactNode }) {
           <SheetTitle>{t("filters")}</SheetTitle>
         </SheetHeader>
         <div className="px-4">{children}</div>
-        <SheetFooter>
+        <SheetFooter className="sticky bottom-0 border-t bg-background">
           <SheetTrigger asChild>
             <Button size="lg">{t("showResults")}</Button>
           </SheetTrigger>

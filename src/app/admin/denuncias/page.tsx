@@ -33,7 +33,10 @@ async function AdminReportsPageContent() {
       ) : (
         <ul className="space-y-3">
           {reports.map((report) => (
-            <li key={report.id} className="space-y-3 rounded-xl border bg-card p-5 shadow-soft">
+            <li
+              key={report.id}
+              className="space-y-3 rounded-xl border bg-card p-4 shadow-soft sm:p-5"
+            >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="rounded-full bg-destructive/10 px-2.5 py-0.5 text-xs font-medium text-destructive">
                   {tReasons(report.reason)}
@@ -46,17 +49,19 @@ async function AdminReportsPageContent() {
                 {report.opportunityStatus === "published" ? (
                   <Link
                     href={`/oportunidades/${report.opportunitySlug}`}
-                    className="font-medium hover:underline"
+                    className="min-w-0 font-medium wrap-break-word hover:underline"
                   >
                     {report.opportunityTitle}
                   </Link>
                 ) : (
-                  <span className="font-medium">{report.opportunityTitle}</span>
+                  <span className="min-w-0 font-medium wrap-break-word">
+                    {report.opportunityTitle}
+                  </span>
                 )}
                 <StatusBadge status={report.opportunityStatus} />
               </div>
               {report.details && (
-                <p className="rounded-lg bg-muted p-3 text-sm">{report.details}</p>
+                <p className="rounded-lg bg-muted p-3 text-sm wrap-break-word">{report.details}</p>
               )}
               <ReportAdminActions
                 reportId={report.id}

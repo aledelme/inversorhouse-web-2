@@ -14,7 +14,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-md supports-[backdrop-filter]:bg-background/70">
-      <div className="container-page flex h-16 items-center gap-6">
+      <div className="container-page flex h-16 items-center gap-3 sm:gap-6">
         <Logo priority />
         <nav aria-label="Principal" className="hidden flex-1 items-center gap-1 md:flex">
           {items.map((item) => (
@@ -27,7 +27,7 @@ export function SiteHeader() {
             </Link>
           ))}
         </nav>
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-1 sm:gap-2">
           <Button asChild size="sm" className="hidden sm:inline-flex">
             <Link href={routes.publish}>{t("common.publish")}</Link>
           </Button>

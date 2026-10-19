@@ -61,7 +61,7 @@ async function InterestedPageContent({
         </p>
       ) : (
         <div className="overflow-hidden rounded-xl border bg-card">
-          <Table>
+          <Table stackOnMobile>
             <TableHeader>
               <TableRow>
                 <TableHead>{t("name")}</TableHead>
@@ -71,22 +71,25 @@ async function InterestedPageContent({
             </TableHeader>
             <TableBody>
               {investors.map((investor, index) => (
-                <TableRow key={index}>
+                <TableRow
+                  key={index}
+                  className="max-md:grid-cols-[minmax(0,1fr)_auto] max-md:gap-y-1"
+                >
                   <TableCell className="font-medium">{investor.name}</TableCell>
-                  <TableCell>
+                  <TableCell className="max-md:col-span-2 max-md:row-start-2">
                     {investor.email ? (
                       <a
                         href={`mailto:${investor.email}`}
-                        className="inline-flex items-center gap-1.5 text-primary hover:underline"
+                        className="inline-flex items-center gap-1.5 text-primary hover:underline max-md:break-all"
                       >
-                        <MailIcon className="size-3.5" />
+                        <MailIcon className="size-3.5 shrink-0" />
                         {investor.email}
                       </a>
                     ) : (
                       "—"
                     )}
                   </TableCell>
-                  <TableCell className="text-right text-muted-foreground">
+                  <TableCell className="text-right text-xs text-muted-foreground md:text-sm">
                     {formatDateShort(investor.createdAt)}
                   </TableCell>
                 </TableRow>

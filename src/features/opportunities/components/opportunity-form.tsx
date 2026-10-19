@@ -451,7 +451,8 @@ export function OpportunityForm({
         <FieldError messages={errors.documents} />
       </Section>
 
-      <div className="sticky bottom-0 z-10 -mx-4 flex flex-col gap-3 border-t bg-background/95 px-4 py-4 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
+      {/* Sticky only from `sm`: on phones the stacked bar would cover too much of the form. */}
+      <div className="-mx-4 flex flex-col gap-3 border-t bg-background/95 px-4 py-4 backdrop-blur sm:sticky sm:bottom-0 sm:z-10 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-xs text-muted-foreground">{t("legalNotice")}</p>
         <Button type="submit" size="lg" disabled={pending || uploading > 0}>
           {uploading > 0
