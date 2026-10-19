@@ -207,7 +207,7 @@ export function OpportunityForm({
               <Label
                 key={option}
                 htmlFor={`type-${option}`}
-                className="flex cursor-pointer items-start gap-3 rounded-lg border bg-card p-3 font-normal has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-accent/50"
+                className="flex cursor-pointer items-start gap-3 rounded-lg border bg-card p-3 font-normal has-data-[state=checked]:border-primary has-data-[state=checked]:bg-accent/50"
               >
                 <RadioGroupItem id={`type-${option}`} value={option} className="mt-0.5" />
                 <span>

@@ -20,7 +20,7 @@ export function Gallery({ images, title }: { images: GalleryImage[]; title: stri
 
   if (images.length === 0) {
     return (
-      <div className="relative aspect-[16/9] overflow-hidden rounded-2xl">
+      <div className="relative aspect-video overflow-hidden rounded-2xl">
         <ImagePlaceholder />
       </div>
     );
@@ -39,7 +39,7 @@ export function Gallery({ images, title }: { images: GalleryImage[]; title: stri
         <button
           type="button"
           onClick={() => show(0)}
-          className="group relative aspect-[16/10] overflow-hidden rounded-2xl bg-muted"
+          className="group relative aspect-16/10 overflow-hidden rounded-2xl bg-muted"
           aria-label={t("photoAlt", { index: 1, title })}
         >
           <Image
@@ -81,7 +81,7 @@ export function Gallery({ images, title }: { images: GalleryImage[]; title: stri
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-[calc(100%-1rem)] border-none bg-black/95 p-2 text-white sm:max-w-5xl">
           <DialogTitle className="sr-only">{t("gallery")}</DialogTitle>
-          <div className="relative aspect-[3/2] w-full">
+          <div className="relative aspect-3/2 w-full">
             <Image
               src={images[index]!.url}
               alt={t("photoAlt", { index: index + 1, title })}

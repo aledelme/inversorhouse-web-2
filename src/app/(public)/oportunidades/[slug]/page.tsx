@@ -133,7 +133,7 @@ function DetailSkeleton() {
     <div className="container-page space-y-6 py-12">
       <Skeleton className="h-6 w-40" />
       <Skeleton className="h-12 w-3/4" />
-      <Skeleton className="aspect-[16/9] w-full rounded-2xl" />
+      <Skeleton className="aspect-video w-full rounded-2xl" />
     </div>
   );
 }
