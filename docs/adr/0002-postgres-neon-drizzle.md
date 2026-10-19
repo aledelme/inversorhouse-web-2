@@ -1,6 +1,7 @@
 # 0002. Use PostgreSQL (Neon) with Drizzle ORM
 
-- Status: accepted
+- Status: accepted. The per-Preview database branches are superseded by
+  [0012](0012-production-only-deployments.md): no preview deployments, no Neon branches.
 - Date: 2026-10-18
 
 ## Context

@@ -1,8 +1,11 @@
+import { HeadObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { eq } from "drizzle-orm";
 import { describe, expect, it } from "vitest";
 
 import { db } from "@/db/client";
 import { opportunities, opportunityDocuments, opportunityImages } from "@/db/schema";
+import { env } from "@/lib/env";
+import { createStorageClient } from "@/lib/storage/create-client";
 
 import { createUser } from "../../../../tests/factories/db";
 import { buildOpportunityInput } from "../../../../tests/factories/opportunity-input";
@@ -116,6 +119,43 @@ describe("ownership and moderation (rule #6)", () => {
     await expect(
       updateOpportunity({ userId: admin.id, isAdmin: true }, id, buildOpportunityInput({ images })),
     ).resolves.toMatchObject({ id });
+  });
+
+  it("deletes files dropped in an edit from storage and keeps the rest", async () => {
+    const owner = await createUser();
+    const actor = { userId: owner.id, isAdmin: false };
+    const prefix = `u/${owner.id}/`;
+    const s3 = createStorageClient({
+      endpoint: env.R2_ENDPOINT,
+      accessKeyId: env.R2_ACCESS_KEY_ID,
+      secretAccessKey: env.R2_SECRET_ACCESS_KEY,
+    });
+    const bucket = env.R2_PRIVATE_BUCKET;
+    const exists = (key: string) =>
+      s3.send(new HeadObjectCommand({ Bucket: bucket, Key: key })).then(
+        () => true,
+        () => false,
+      );
+    const doc = (name: string) => ({
+      key: `${prefix}${name}.pdf`,
+      fileName: `${name}.pdf`,
+      size: 1,
+      contentType: "application/pdf",
+    });
+    for (const name of ["kept", "dropped"]) {
+      await s3.send(
+        new PutObjectCommand({ Bucket: bucket, Key: `${prefix}${name}.pdf`, Body: "x" }),
+      );
+    }
+    const { id } = await createOpportunity(
+      actor,
+      buildOpportunityInput({ documents: [doc("kept"), doc("dropped")] }),
+    );
+
+    await updateOpportunity(actor, id, buildOpportunityInput({ documents: [doc("kept")] }));
+
+    expect(await exists(`${prefix}kept.pdf`)).toBe(true);
+    expect(await exists(`${prefix}dropped.pdf`)).toBe(false);
   });
 
   it("owners can withdraw and republish, but not undo an admin removal", async () => {

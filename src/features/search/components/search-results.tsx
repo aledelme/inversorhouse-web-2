@@ -1,9 +1,8 @@
-import { ChevronLeftIcon, ChevronRightIcon, SearchXIcon } from "lucide-react";
+import { SearchXIcon } from "lucide-react";
 import type { Route } from "next";
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
-import { Button } from "@/components/ui/button";
+import { PaginationNav } from "@/components/layout/pagination-nav";
 import { OpportunityGrid } from "@/features/opportunities";
 import { searchOpportunities } from "@/features/opportunities/server";
 
@@ -45,40 +44,7 @@ export async function SearchResults({ searchParams }: Props) {
         />
       )}
 
-      {result.pageCount > 1 && (
-        <nav
-          aria-label={t("pagination.label")}
-          className="flex items-center justify-between gap-4 pt-4"
-        >
-          <Button
-            asChild
-            variant="outline"
-            aria-disabled={result.page <= 1}
-            className={result.page <= 1 ? "pointer-events-none opacity-40" : undefined}
-          >
-            <Link href={pageHref(Math.max(1, result.page - 1))} scroll>
-              <ChevronLeftIcon />
-              <span className="sr-only sm:not-sr-only">{t("pagination.previous")}</span>
-            </Link>
-          </Button>
-          <span className="text-sm text-muted-foreground">
-            {t("pagination.page", { page: result.page, total: result.pageCount })}
-          </span>
-          <Button
-            asChild
-            variant="outline"
-            aria-disabled={result.page >= result.pageCount}
-            className={
-              result.page >= result.pageCount ? "pointer-events-none opacity-40" : undefined
-            }
-          >
-            <Link href={pageHref(Math.min(result.pageCount, result.page + 1))} scroll>
-              <span className="sr-only sm:not-sr-only">{t("pagination.next")}</span>
-              <ChevronRightIcon />
-            </Link>
-          </Button>
-        </nav>
-      )}
+      <PaginationNav page={result.page} pageCount={result.pageCount} href={pageHref} />
     </div>
   );
 }

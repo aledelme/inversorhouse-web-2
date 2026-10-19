@@ -158,5 +158,14 @@ test("admin removes the opportunity and suspends a promoter", async ({ browser }
     .getByRole("button", { name: "Reactivar" })
     .click();
   await expect(page.getByText("Cuenta reactivada")).toBeVisible();
+
+  // User search goes through Clerk: names and emails are not stored in our database.
+  await page
+    .getByRole("searchbox", { name: "Buscar por nombre o email…" })
+    .fill(E2E_USERS.investor.email);
+  await page.getByRole("button", { name: "Buscar", exact: true }).click();
+  await expect(page).toHaveURL(/\/admin\/usuarios\?q=/);
+  await expect(page.getByRole("cell", { name: E2E_USERS.investor.email })).toBeVisible();
+  await expect(page.getByRole("row").filter({ hasText: "Seed promoter" })).toHaveCount(0);
   await context.close();
 });

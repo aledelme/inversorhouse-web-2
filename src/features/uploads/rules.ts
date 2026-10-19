@@ -44,8 +44,11 @@ export const uploadRequestSchema = z
 
 export type UploadRequest = z.infer<typeof uploadRequestSchema>;
 
+/** Root of every user upload; nothing else in the buckets lives under it (seed data uses `seed/`). */
+export const UPLOADS_ROOT = "u/";
+
 /** Every object a user uploads lives under their own prefix. */
-export const userUploadPrefix = (userId: string) => `u/${userId}/`;
+export const userUploadPrefix = (userId: string) => `${UPLOADS_ROOT}${userId}/`;
 
 export function isOwnUploadKey(key: string, userId: string) {
   return key.startsWith(userUploadPrefix(userId)) && !key.includes("..");

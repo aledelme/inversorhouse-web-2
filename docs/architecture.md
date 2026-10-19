@@ -74,5 +74,7 @@ Cache Components is on: everything is dynamic unless cached. Tags in use:
 | `pnpm dev`              | Docker `postgres` :5442            | MinIO :9010        | development instance (or keyless) | :3020+            |
 | `pnpm prod:local`       | Docker `postgres` :5442            | MinIO :9010        | development instance              | :3021+            |
 | tests (integration/e2e) | Docker `postgres-test` :5443 (RAM) | MinIO test buckets | development instance              | :3022             |
-| Vercel Preview          | Neon branch per deployment         | R2                 | production instance               | *.vercel.app      |
 | Vercel Production       | Neon main                          | R2                 | production instance               | inversorhouse.com |
+
+No Preview deployments and no Neon preview branches (ADR-0012): previews would share production
+Clerk and R2 (real users and files).

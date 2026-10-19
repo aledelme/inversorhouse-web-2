@@ -19,6 +19,8 @@ export const env = createEnv({
     R2_SECRET_ACCESS_KEY: z.string().min(1),
     R2_PUBLIC_BUCKET: z.string().min(1),
     R2_PRIVATE_BUCKET: z.string().min(1),
+    // Bearer token Vercel Cron sends to /api/cron/* (ADR-0011). Unset = cron routes answer 401.
+    CRON_SECRET: z.string().min(16).optional(),
   },
   client: {
     NEXT_PUBLIC_SITE_URL: z.url(),

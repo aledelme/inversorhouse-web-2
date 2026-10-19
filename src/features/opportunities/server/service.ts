@@ -13,6 +13,7 @@ import {
   provinces,
   users,
 } from "@/db/schema";
+import { deleteDetachedFiles, isOwnUploadKey } from "@/features/uploads/server";
 import { DomainError } from "@/lib/auth/errors";
 import { slugify } from "@/lib/utils/slugify";
 
@@ -25,9 +26,6 @@ import {
 
 /** Who performs a mutation. `isAdmin` comes from requireAdmin/isAdmin, never from the client. */
 export type Actor = { userId: string; isAdmin: boolean };
-
-const ownsKey = (key: string, userId: string) =>
-  key.startsWith(`u/${userId}/`) && !key.includes("..");
 
 async function resolveLocation(municipalityCode: string) {
   const [row] = await db
@@ -79,7 +77,7 @@ async function toColumns(data: OpportunityData) {
 /** New keys must belong to the actor; keys already attached to the opportunity are kept as-is. */
 function assertKeys(data: OpportunityData, actor: Actor, existingKeys: Set<string>) {
   for (const { key } of [...data.images, ...data.documents]) {
-    if (!existingKeys.has(key) && !ownsKey(key, actor.userId)) {
+    if (!existingKeys.has(key) && !isOwnUploadKey(key, actor.userId)) {
       throw new DomainError("invalidUpload");
     }
   }
@@ -167,6 +165,15 @@ export async function updateOpportunity(actor: Actor, id: string, input: Opportu
   await db.transaction(async (tx) => {
     await tx.update(opportunities).set(columns).where(eq(opportunities.id, id));
     await replaceFiles(tx, id, data);
+  });
+
+  // Files dropped in this edit leave storage now (removed documents must not linger).
+  const kept = (files: { key: string }[]) => new Set(files.map((file) => file.key));
+  const keptImages = kept(data.images);
+  const keptDocuments = kept(data.documents);
+  await deleteDetachedFiles({
+    image: images.map((r) => r.key).filter((key) => !keptImages.has(key)),
+    document: documents.map((r) => r.key).filter((key) => !keptDocuments.has(key)),
   });
   return { id, slug: current.slug };
 }

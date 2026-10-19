@@ -1,9 +1,13 @@
-import type { Metadata } from "next";
+import type { Metadata, Route } from "next";
+import Form from "next/form";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
 import { PageHeader } from "@/components/layout/page-header";
 import { PageSkeleton } from "@/components/layout/page-skeleton";
+import { PaginationNav } from "@/components/layout/pagination-nav";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -12,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { UserAdminActions } from "@/features/admin";
+import { parsePage, UserAdminActions } from "@/features/admin";
 import { adminListUsers } from "@/features/admin/server";
 import { requireAdminPage } from "@/lib/auth";
 import { formatDateShort } from "@/lib/format";
@@ -22,12 +26,39 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("title"), robots: { index: false } };
 }
 
-async function AdminUsersPageContent() {
-  const viewer = await requireAdminPage();
-  const [users, t] = await Promise.all([adminListUsers(), getTranslations("admin.users")]);
+async function AdminUsersPageContent({ searchParams }: PageProps<"/admin/usuarios">) {
+  const [viewer, sp, t] = await Promise.all([
+    requireAdminPage(),
+    searchParams,
+    getTranslations("admin.users"),
+  ]);
+  const q = typeof sp.q === "string" ? sp.q.trim().slice(0, 100) || undefined : undefined;
+  const result = await adminListUsers({ q, page: parsePage(sp.pagina) });
+  const users = result.items;
+  const pageHref = (page: number) => {
+    const query = new URLSearchParams({
+      ...(q ? { q } : {}),
+      ...(page > 1 ? { pagina: String(page) } : {}),
+    }).toString();
+    return `/admin/usuarios${query ? `?${query}` : ""}` as Route;
+  };
+
   return (
     <>
       <PageHeader title={t("title")} description={t("description")} />
+      <Form action="/admin/usuarios" className="mb-4 flex w-full gap-2 sm:max-w-md">
+        <Input
+          name="q"
+          type="search"
+          defaultValue={q}
+          placeholder={t("searchPlaceholder")}
+          aria-label={t("searchPlaceholder")}
+        />
+        <Button type="submit" variant="outline">
+          {t("search")}
+        </Button>
+      </Form>
+      <p className="mb-3 text-sm text-muted-foreground">{t("count", { count: result.total })}</p>
       <div className="overflow-x-auto rounded-xl border bg-card">
         <Table stackOnMobile>
           <TableHeader>
@@ -40,6 +71,13 @@ async function AdminUsersPageContent() {
             </TableRow>
           </TableHeader>
           <TableBody>
+            {users.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={5} className="py-10 text-center text-muted-foreground">
+                  {t("empty")}
+                </TableCell>
+              </TableRow>
+            )}
             {users.map((user) => (
               <TableRow
                 key={user.id}
@@ -81,6 +119,7 @@ async function AdminUsersPageContent() {
           </TableBody>
         </Table>
       </div>
+      <PaginationNav page={result.page} pageCount={result.pageCount} href={pageHref} />
     </>
   );
 }
@@ -89,10 +128,10 @@ async function AdminUsersPageContent() {
  * Reads the session/DB at request time: streamed inside the page's own <Suspense> so
  * navigations between sibling pages stay instant (loading.tsx doesn't cover them).
  */
-export default function AdminUsersPage() {
+export default function AdminUsersPage(props: PageProps<"/admin/usuarios">) {
   return (
     <Suspense fallback={<PageSkeleton />}>
-      <AdminUsersPageContent />
+      <AdminUsersPageContent {...props} />
     </Suspense>
   );
 }

@@ -1,9 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Route } from "next";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
 import { PageHeader } from "@/components/layout/page-header";
 import { PageSkeleton } from "@/components/layout/page-skeleton";
+import { PaginationNav } from "@/components/layout/pagination-nav";
+import { parsePage } from "@/features/admin";
 import { listAuditLog } from "@/features/admin/server";
 import { requireAdminPage } from "@/lib/auth";
 import { formatDateShort } from "@/lib/format";
@@ -13,9 +15,16 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("title"), robots: { index: false } };
 }
 
-async function AdminActivityPageContent() {
-  await requireAdminPage();
-  const [entries, t] = await Promise.all([listAuditLog(), getTranslations("admin.activity")]);
+async function AdminActivityPageContent({ searchParams }: PageProps<"/admin/actividad">) {
+  const [, sp, t] = await Promise.all([
+    requireAdminPage(),
+    searchParams,
+    getTranslations("admin.activity"),
+  ]);
+  const log = await listAuditLog({ page: parsePage(sp.pagina) });
+  const entries = log.items;
+  const pageHref = (page: number) =>
+    (page > 1 ? `/admin/actividad?pagina=${page}` : "/admin/actividad") as Route;
   return (
     <>
       <PageHeader title={t("title")} description={t("description")} />
@@ -44,6 +53,7 @@ async function AdminActivityPageContent() {
           ))}
         </ol>
       )}
+      <PaginationNav page={log.page} pageCount={log.pageCount} href={pageHref} />
     </>
   );
 }
@@ -52,10 +62,10 @@ async function AdminActivityPageContent() {
  * Reads the session/DB at request time: streamed inside the page's own <Suspense> so
  * navigations between sibling pages stay instant (loading.tsx doesn't cover them).
  */
-export default function AdminActivityPage() {
+export default function AdminActivityPage(props: PageProps<"/admin/actividad">) {
   return (
     <Suspense fallback={<PageSkeleton />}>
-      <AdminActivityPageContent />
+      <AdminActivityPageContent {...props} />
     </Suspense>
   );
 }

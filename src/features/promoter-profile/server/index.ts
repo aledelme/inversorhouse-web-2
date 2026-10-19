@@ -7,4 +7,5 @@ export {
   getPromoterContact,
   getUsersBasicInfo,
   hasPhone,
+  searchClerkUserIds,
 } from "./contact";

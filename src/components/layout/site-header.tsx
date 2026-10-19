@@ -16,7 +16,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-md supports-backdrop-filter:bg-background/70">
       <div className="container-page flex h-16 items-center gap-3 sm:gap-6">
         <Logo priority />
-        <nav aria-label="Principal" className="hidden flex-1 items-center gap-1 md:flex">
+        <nav aria-label={t("nav.main")} className="hidden flex-1 items-center gap-1 md:flex">
           {items.map((item) => (
             <Link
               key={item.href}

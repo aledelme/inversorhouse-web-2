@@ -1,6 +1,6 @@
 import "server-only";
 
-import { and, count, desc, eq, gte, ilike, inArray, sql } from "drizzle-orm";
+import { and, count, desc, eq, gte, ilike, inArray, or, sql } from "drizzle-orm";
 
 import { db } from "@/db/client";
 import {
@@ -10,8 +10,13 @@ import {
   opportunityInterests,
   users,
 } from "@/db/schema";
-import { getUsersBasicInfo } from "@/features/promoter-profile/server";
+import { getUsersBasicInfo, searchClerkUserIds } from "@/features/promoter-profile/server";
 import { DomainError } from "@/lib/auth/errors";
+
+import { ADMIN_PAGE_SIZE, pageInfo } from "../paging";
+
+/** ILIKE pattern for "contains", with the wildcard characters of `text` escaped. */
+const containsPattern = (text: string) => `%${text.replace(/[\\%_]/g, "\\$&")}%`;
 
 export type AuditAction =
   | "opportunity.remove"
@@ -33,7 +38,9 @@ export async function logAdminAction(entry: {
   await db.insert(adminAuditLog).values(entry);
 }
 
-export async function listAuditLog(limit = 100) {
+export async function listAuditLog({ page = 1 }: { page?: number } = {}) {
+  const [{ total } = { total: 0 }] = await db.select({ total: count() }).from(adminAuditLog);
+  const paging = pageInfo(page, total);
   const rows = await db
     .select({
       id: adminAuditLog.id,
@@ -46,13 +53,19 @@ export async function listAuditLog(limit = 100) {
     })
     .from(adminAuditLog)
     .innerJoin(users, eq(users.id, adminAuditLog.actorId))
-    .orderBy(desc(adminAuditLog.createdAt))
-    .limit(limit);
+    .orderBy(desc(adminAuditLog.createdAt), desc(adminAuditLog.id))
+    .limit(ADMIN_PAGE_SIZE)
+    .offset(paging.offset);
   const info = await getUsersBasicInfo([...new Set(rows.map((r) => r.actorClerkId))]);
-  return rows.map(({ actorClerkId, ...row }) => ({
-    ...row,
-    actor: info.get(actorClerkId)?.name ?? "—",
-  }));
+  return {
+    items: rows.map(({ actorClerkId, ...row }) => ({
+      ...row,
+      actor: info.get(actorClerkId)?.name ?? "—",
+    })),
+    total,
+    page: paging.page,
+    pageCount: paging.pageCount,
+  };
 }
 
 export async function getDashboardStats() {
@@ -75,7 +88,17 @@ export async function getDashboardStats() {
 export async function adminListOpportunities(filters: {
   q?: string;
   status?: "published" | "withdrawn" | "removed";
+  page?: number;
 }) {
+  const where = and(
+    filters.status ? eq(opportunities.status, filters.status) : undefined,
+    filters.q ? ilike(opportunities.title, containsPattern(filters.q)) : undefined,
+  );
+  const [{ total } = { total: 0 }] = await db
+    .select({ total: count() })
+    .from(opportunities)
+    .where(where);
+  const paging = pageInfo(filters.page ?? 1, total);
   const rows = await db
     .select({
       id: opportunities.id,
@@ -96,24 +119,37 @@ export async function adminListOpportunities(filters: {
     .from(opportunities)
     .innerJoin(users, eq(users.id, opportunities.promoterId))
     .innerJoin(municipalities, eq(municipalities.code, opportunities.municipalityCode))
-    .where(
-      and(
-        filters.status ? eq(opportunities.status, filters.status) : undefined,
-        filters.q
-          ? ilike(opportunities.title, `%${filters.q.replace(/[%_]/g, "\\$&")}%`)
-          : undefined,
-      ),
-    )
-    .orderBy(desc(opportunities.createdAt))
-    .limit(200);
+    .where(where)
+    .orderBy(desc(opportunities.createdAt), desc(opportunities.id))
+    .limit(ADMIN_PAGE_SIZE)
+    .offset(paging.offset);
   const info = await getUsersBasicInfo([...new Set(rows.map((r) => r.promoterClerkId))]);
-  return rows.map(({ promoterClerkId, ...row }) => ({
-    ...row,
-    promoter: info.get(promoterClerkId) ?? { name: "—", email: null },
-  }));
+  return {
+    items: rows.map(({ promoterClerkId, ...row }) => ({
+      ...row,
+      promoter: info.get(promoterClerkId) ?? { name: "—", email: null },
+    })),
+    total,
+    page: paging.page,
+    pageCount: paging.pageCount,
+  };
 }
 
-export async function adminListUsers() {
+/**
+ * Users, newest first. `q` matches name/email/phone through Clerk (PII is not in our DB) or
+ * the Clerk id itself (also finds local seed users).
+ */
+export async function adminListUsers(filters: { q?: string; page?: number } = {}) {
+  const q = filters.q?.trim();
+  const clerkMatches = q ? await searchClerkUserIds(q) : [];
+  const where = q
+    ? or(
+        clerkMatches.length ? inArray(users.clerkUserId, clerkMatches) : undefined,
+        ilike(users.clerkUserId, containsPattern(q)),
+      )
+    : undefined;
+  const [{ total } = { total: 0 }] = await db.select({ total: count() }).from(users).where(where);
+  const paging = pageInfo(filters.page ?? 1, total);
   const rows = await db
     .select({
       id: users.id,
@@ -124,13 +160,20 @@ export async function adminListUsers() {
       opportunityCount: sql<number>`(select count(*)::int from ${opportunities} where ${opportunities.promoterId} = ${users.id})`,
     })
     .from(users)
-    .orderBy(desc(users.createdAt))
-    .limit(200);
+    .where(where)
+    .orderBy(desc(users.createdAt), desc(users.id))
+    .limit(ADMIN_PAGE_SIZE)
+    .offset(paging.offset);
   const info = await getUsersBasicInfo(rows.map((r) => r.clerkUserId));
-  return rows.map((row) => ({
-    ...row,
-    ...(info.get(row.clerkUserId) ?? { name: "—", email: null }),
-  }));
+  return {
+    items: rows.map((row) => ({
+      ...row,
+      ...(info.get(row.clerkUserId) ?? { name: "—", email: null }),
+    })),
+    total,
+    page: paging.page,
+    pageCount: paging.pageCount,
+  };
 }
 
 /** Business rule #7: ban hides all listings (via the visibility query) and blocks the account. */

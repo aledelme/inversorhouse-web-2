@@ -8,8 +8,8 @@ dominio y las variables ya configuradas (Clerk, R2, Stripe, Telegram…).
 ### Base de datos: Neon
 
 1. Vercel → proyecto → **Storage / Integrations** → instala **Neon**.
-2. Vincúlalo a _Production_ y _Preview_. Activa la opción de **crear una rama de base de datos por
-   cada Preview deployment**: así las previews nunca tocan los datos reales.
+2. Vincúlalo solo a _Production_ y deja **desactivada** la creación de ramas por preview: no usamos
+   Preview deployments (ver "Sin previews" más abajo y ADR-0012).
 3. La integración crea `DATABASE_URL` (usa la cadena _pooled_ si te da a elegir).
 
 Las migraciones se aplican solas en cada despliegue (`vercel.json` → `pnpm db:migrate && pnpm build`).
@@ -46,17 +46,24 @@ nombre y apellidos, porque el nombre se muestra a la otra parte en los contactos
 
 ## 2. Variables de entorno en Vercel
 
-| Variable                                                | Valor                                                                     | Entornos            |
-| ------------------------------------------------------- | ------------------------------------------------------------------------- | ------------------- |
-| `DATABASE_URL`                                          | la crea Neon                                                              | Production, Preview |
-| `NEXT_PUBLIC_SITE_URL`                                  | `https://inversorhouse.com` (en Preview, la URL de la preview o la misma) | todos               |
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY` | ya existen                                                                | todos               |
-| `NEXT_PUBLIC_R2_CLOUDFLARE_URL`                         | ya existe                                                                 | todos               |
-| `R2_ACCOUNT_ID`                                         | Account ID de Cloudflare                                                  | todos               |
-| `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`              | token del paso anterior                                                   | todos               |
-| `R2_PUBLIC_BUCKET`                                      | nombre del bucket público                                                 | todos               |
-| `R2_PRIVATE_BUCKET`                                     | nombre del bucket privado                                                 | todos               |
-| `ADMIN_EMAILS`                                          | emails de administradores, separados por comas                            | todos               |
+Todas en el entorno **Production** (no hay previews).
+
+| Variable                                                | Valor                                                        |
+| ------------------------------------------------------- | ------------------------------------------------------------ |
+| `DATABASE_URL`                                          | la crea Neon                                                 |
+| `NEXT_PUBLIC_SITE_URL`                                  | `https://inversorhouse.com`                                  |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY` | ya existen                                                   |
+| `NEXT_PUBLIC_R2_CLOUDFLARE_URL`                         | ya existe                                                    |
+| `R2_ACCOUNT_ID`                                         | Account ID de Cloudflare                                     |
+| `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`              | token del paso anterior                                      |
+| `R2_PUBLIC_BUCKET`                                      | nombre del bucket público                                    |
+| `R2_PRIVATE_BUCKET`                                     | nombre del bucket privado                                    |
+| `ADMIN_EMAILS`                                          | emails de administradores, separados por comas               |
+| `CRON_SECRET`                                           | secreto aleatorio de 16+ caracteres (`openssl rand -hex 32`) |
+
+`CRON_SECRET` protege la limpieza diaria de ficheros huérfanos en R2 (ADR-0011): Vercel Cron la
+ejecuta según `vercel.json` y envía el secreto automáticamente. Sin esta variable la limpieza no se
+ejecuta (la ruta responde 401). Se puede comprobar en Vercel → proyecto → _Cron Jobs_.
 
 **No** definas `R2_ENDPOINT` en Vercel (solo se usa en local con MinIO). `MONGO_DB_URI`, Stripe y
 Telegram pueden quedarse: la v2 no los usa.
@@ -66,9 +73,15 @@ Telegram pueden quedarse: la v2 no los usa.
 Vercel → proyecto → _Settings → Git_ → **Disconnect** el repositorio antiguo → **Connect** este.
 La rama de producción debe ser la rama principal de este repositorio.
 
+### Sin previews
+
+No usamos Preview deployments: compartirían Clerk y R2 de producción (usuarios y ficheros reales).
+Desactívalos en _Settings → Git → Ignored Build Step_ → **Only build production**. La revisión
+previa se hace en local con `pnpm verify:full` y `pnpm prod:local`.
+
 ## 4. Primer despliegue
 
-1. Haz push: Vercel construye una **Preview** con su propia rama de Neon. Revísala.
+1. Antes de hacer push, revisa en local con `pnpm verify:full` y `pnpm prod:local`.
 2. Carga la geografía en la base de datos de producción **una vez** desde tu máquina. El
    `db:seed` normal se niega a tocar bases remotas a propósito; este script solo inserta
    CCAA, provincias y municipios, pide confirmación y es idempotente:
@@ -78,7 +91,7 @@ La rama de producción debe ser la rama principal de este repositorio.
    DATABASE_URL="<cadena de Neon de producción>" pnpm tsx scripts/db-seed-geo-remote.ts
    ```
 
-3. Promociona a producción y comprueba: home, buscador, alta de usuario, publicar con foto y
+3. Haz push a la rama principal (despliega a producción) y comprueba: home, buscador, alta de usuario, publicar con foto y
    documento, descarga de documento y panel de administración con un email de `ADMIN_EMAILS`.
 
 ## 5. Vuelta atrás

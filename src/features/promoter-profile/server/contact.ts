@@ -98,6 +98,17 @@ export async function getPromoterContact(
   }
 }
 
+/**
+ * Clerk ids of the users whose name, email, phone or id match `query` (admin user search).
+ * Personal data never touches our DB, so searching it has to go through Clerk (ADR-0003).
+ * Capped at 100 matches: enough to find a person, not meant for bulk export.
+ */
+export async function searchClerkUserIds(query: string): Promise<string[]> {
+  const client = await clerkClient();
+  const { data } = await client.users.getUserList({ query, limit: 100 });
+  return data.map((user) => user.id);
+}
+
 /** Name + email of several users (interested investors), read from Clerk on demand. */
 export async function getUsersBasicInfo(clerkUserIds: string[]) {
   const real = clerkUserIds.filter((id) => !isSeedUser(id));

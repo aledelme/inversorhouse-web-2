@@ -1,11 +1,12 @@
 import { SparklesIcon } from "lucide-react";
-import type { Metadata } from "next";
+import type { Metadata, Route } from "next";
 import Form from "next/form";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
 import { PageHeader } from "@/components/layout/page-header";
+import { PaginationNav } from "@/components/layout/pagination-nav";
 import { PageSkeleton } from "@/components/layout/page-skeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,7 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { OpportunityAdminActions } from "@/features/admin";
+import { OpportunityAdminActions, parsePage } from "@/features/admin";
 import { adminListOpportunities } from "@/features/admin/server";
 import { StatusBadge, TypeBadge } from "@/features/opportunities";
 import { requireAdminPage } from "@/lib/auth";
@@ -39,12 +40,21 @@ async function AdminOpportunitiesPageContent({ searchParams }: PageProps<"/admin
   ]);
   const q = typeof sp.q === "string" ? sp.q.slice(0, 100) : undefined;
   const status = STATUSES.find((s) => s === sp.estado);
-  const items = await adminListOpportunities({ q, status });
+  const result = await adminListOpportunities({ q, status, page: parsePage(sp.pagina) });
+  const { items } = result;
+  const pageHref = (page: number) => {
+    const query = new URLSearchParams({
+      ...(q ? { q } : {}),
+      ...(status ? { estado: status } : {}),
+      ...(page > 1 ? { pagina: String(page) } : {}),
+    }).toString();
+    return `/admin/oportunidades${query ? `?${query}` : ""}` as Route;
+  };
 
   return (
     <>
       <PageHeader title={t("title")} description={t("description")} />
-      <div className="mb-6 flex flex-wrap items-center gap-3">
+      <div className="mb-4 flex flex-wrap items-center gap-3">
         <Form action="/admin/oportunidades" className="flex w-full gap-2 sm:w-auto sm:flex-1">
           {status && <input type="hidden" name="estado" value={status} />}
           <Input
@@ -81,6 +91,7 @@ async function AdminOpportunitiesPageContent({ searchParams }: PageProps<"/admin
           ))}
         </nav>
       </div>
+      <p className="mb-3 text-sm text-muted-foreground">{t("count", { count: result.total })}</p>
 
       <div className="overflow-x-auto rounded-xl border bg-card">
         <Table stackOnMobile>
@@ -145,6 +156,7 @@ async function AdminOpportunitiesPageContent({ searchParams }: PageProps<"/admin
           </TableBody>
         </Table>
       </div>
+      <PaginationNav page={result.page} pageCount={result.pageCount} href={pageHref} />
     </>
   );
 }

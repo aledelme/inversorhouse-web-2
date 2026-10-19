@@ -3,6 +3,7 @@ import {
   getOpportunityOwnerId,
   isOpportunityVisible,
 } from "@/features/opportunities/server";
+import { routes } from "@/config/navigation";
 import { getViewer, isAdmin } from "@/lib/auth";
 import { presignDownload } from "@/lib/storage";
 
@@ -16,7 +17,7 @@ export async function GET(request: Request, ctx: RouteContext<"/api/documents/[i
   if (!viewer) {
     return Response.redirect(
       new URL(
-        `/sign-in?redirect_url=${encodeURIComponent(new URL(request.url).pathname)}`,
+        `${routes.signIn}?redirect_url=${encodeURIComponent(new URL(request.url).pathname)}`,
         request.url,
       ),
       302,
