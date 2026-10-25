@@ -50,3 +50,5 @@
    The promoter sees interested users' name + email (read from Clerk on demand).
 10. **Reports.** One per (opportunity, user). Admins resolve or dismiss them.
 11. **Featured.** Opportunities created by an admin are featured automatically; admins can toggle it.
+12. **New-listing notice.** Creating an opportunity emails a WhatsApp-ready summary (no promoter
+    data, link + cover photo) to `NEW_OPPORTUNITY_NOTIFY_EMAILS` (ADR-0013). Republishing does not.

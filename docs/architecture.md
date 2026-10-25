@@ -10,12 +10,13 @@ Browser ──► Vercel (Next 16, Node runtime)
               │     │ imports
               ├─ src/features/*    business slices: UI + server code + schemas
               │     │ imports
-              ├─ src/lib           env, auth guards, storage (S3/R2), formatting
+              ├─ src/lib           env, auth guards, storage (S3/R2), email (SMTP), formatting
               ├─ src/db            Drizzle schema + client ──► Postgres (Neon / Docker)
               ├─ src/components    design-system primitives (shadcn/ui), layout, brand
               └─ src/i18n          next-intl config ──► messages/es.json
                                     │
 External:  Clerk (identity + PII)   Cloudflare R2 (photos public, documents private)
+           Gmail SMTP (notification emails, ADR-0013)
 ```
 
 ## Layers and dependency rules (ADR-0004)
@@ -54,6 +55,8 @@ features/opportunities/
   and reads the session with Clerk `auth()`.
 - **Mutations** are Server Actions: `requireUser()` → Zod parse → service → `updateTag(...)`.
 - **Uploads** go browser → R2 directly via presigned PUT URLs (ADR-0005); the action only records keys.
+- **Emails** (ADR-0013): side effects of a mutation run in `after()` so they never block or fail it;
+  e.g. publishing a new opportunity emails `NEW_OPPORTUNITY_NOTIFY_EMAILS` a WhatsApp-ready text.
 - **Document downloads** go through `/api/documents/[id]`, which checks the session and redirects to
   a 5-minute presigned GET URL.
 

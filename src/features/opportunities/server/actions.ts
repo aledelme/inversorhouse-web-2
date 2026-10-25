@@ -1,6 +1,7 @@
 "use server";
 
 import { updateTag } from "next/cache";
+import { after } from "next/server";
 
 import { hasPhone } from "@/features/promoter-profile/server";
 import { DomainError, isAdmin, requireUser } from "@/lib/auth";
@@ -8,6 +9,7 @@ import { type ActionResult, runAction } from "@/lib/safe-action";
 
 import type { OpportunityInput } from "../schemas";
 
+import { notifyNewOpportunity } from "./notify";
 import { createOpportunity, setStatusByOwner, updateOpportunity } from "./service";
 import { OPPORTUNITIES_TAG, opportunityTag } from "./tags";
 
@@ -28,6 +30,8 @@ export async function createOpportunityAction(
       input,
     );
     invalidate(created.id);
+    // Off the response path: the promoter does not wait for SMTP.
+    after(() => notifyNewOpportunity(created.slug));
     return created;
   });
 }

@@ -21,6 +21,12 @@ export const env = createEnv({
     R2_PRIVATE_BUCKET: z.string().min(1),
     // Bearer token Vercel Cron sends to /api/cron/* (ADR-0011). Unset = cron routes answer 401.
     CRON_SECRET: z.string().min(16).optional(),
+    // Gmail SMTP (ADR-0013). Unset = emails are skipped (local dev, tests).
+    EMAIL_USER: z.string().optional(),
+    EMAIL_PASS: z.string().optional(),
+    EMAIL_FROM: z.string().optional(),
+    // Comma-separated. Who gets the "new opportunity" email; empty = nobody.
+    NEW_OPPORTUNITY_NOTIFY_EMAILS: z.string().default(""),
   },
   client: {
     NEXT_PUBLIC_SITE_URL: z.url(),

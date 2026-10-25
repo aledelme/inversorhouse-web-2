@@ -5,6 +5,8 @@
   Authorization always happens here, never only in `proxy.ts`.
 - `storage/`: S3 client for R2/MinIO, presigned URLs, public URL builder. Server-only, except
   `publicUrl` helpers that only need `NEXT_PUBLIC_*`.
+- `email/`: `sendEmail` via Gmail SMTP (nodemailer, ADR-0013). Server-only. No-op (returns false)
+  without `EMAIL_USER`/`EMAIL_PASS`. Never log recipients or content. Mock it in integration tests.
 - `format.ts`: currency, percent, dates, months — locale-aware (`Intl`). Use these, never ad-hoc
   `toLocaleString` in components.
 - `safe-action.ts`: `ActionResult` type and helpers for server actions.

@@ -572,5 +572,21 @@
         "report_dismiss": "descartó una denuncia"
       }
     }
+  },
+  "notifications": {
+    "newOpportunity": {
+      "subject": "Nuevo anuncio de oportunidad: {title}",
+      "heading": "🔥 ¡NUEVA OPORTUNIDAD DE INVERSIÓN!",
+      "title": "✅ {title}",
+      "type": "🏷️ {type}",
+      "location": "📍 {municipality}, {province}",
+      "amountToRaise": "💰 Capital buscado: {amount}",
+      "minTicket": "🎟️ Ticket mínimo: {amount}",
+      "returns": "📈 Rentabilidad anual: {annual} (total: {total})",
+      "term": "⏳ Plazo: {term}",
+      "closesAt": "📅 Cierre: {date}",
+      "link": "🔗 Más info: {url}",
+      "copyHint": "Puedes copiar el bloque de arriba y pegarlo directamente en WhatsApp."
+    }
   }
 }
