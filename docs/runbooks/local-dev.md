@@ -2,7 +2,7 @@
 
 ## Requisitos
 
-- Node 22 (`.nvmrc`), pnpm 11 (`corepack enable`), Docker Desktop en marcha.
+- Node 24 (`.nvmrc`), pnpm 12 (`corepack enable`), Docker Desktop en marcha.
 
 ## Primera vez
 
