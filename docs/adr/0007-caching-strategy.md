@@ -1,6 +1,6 @@
 # 0007. Caching with Cache Components
 
-- Status: accepted
+- Status: accepted — home listings' lifetime superseded by [0014](0014-home-listing-cache-lifetime.md)
 - Date: 2026-10-18
 
 ## Context

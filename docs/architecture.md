@@ -50,7 +50,8 @@ features/opportunities/
 
 - **Public reads** (home, search, detail): Server Components call cached queries
   (`'use cache'`, `cacheLife('minutes')`, `cacheTag('opportunities')`). They are part of the static
-  shell / streamed; no session is read.
+  shell / streamed; no session is read. The home listings use a data-derived lifetime of up to
+  1 hour instead (ADR-0014), so the static `/` isn't regenerated every minute.
 - **Session-dependent UI** (contact box, "Me interesa", header user menu) lives inside `<Suspense>`
   and reads the session with Clerk `auth()`.
 - **Mutations** are Server Actions: `requireUser()` → Zod parse → service → `updateTag(...)`.

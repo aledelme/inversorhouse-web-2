@@ -36,6 +36,7 @@ import type {
   OpportunitySummary,
 } from "../types";
 
+import { homeListingCacheLife } from "./cache-life";
 import { OPPORTUNITIES_TAG, opportunityTag } from "./tags";
 
 /**
@@ -166,26 +167,30 @@ export async function searchOpportunities(filters: OpportunityFilters): Promise<
   };
 }
 
-/** Admin-published (featured) opportunities for the home page. */
+/**
+ * Admin-published (featured) opportunities for the home page. `/` is a static page regenerated
+ * when this cache revalidates, so the lifetime is derived from the data (ADR-0014).
+ */
 export async function listFeaturedOpportunities(limit = 3): Promise<OpportunitySummary[]> {
   "use cache";
-  cacheLife("minutes");
   cacheTag(OPPORTUNITIES_TAG);
   const rows = await baseSummaryQuery()
     .where(and(isVisible(), eq(opportunities.isFeatured, true)))
     .orderBy(desc(opportunities.publishedAt))
     .limit(limit);
+  cacheLife(homeListingCacheLife(rows));
   return rows.map(toSummary);
 }
 
+/** Latest opportunities for the home page (same lifetime rule as above, ADR-0014). */
 export async function listLatestOpportunities(limit = 6): Promise<OpportunitySummary[]> {
   "use cache";
-  cacheLife("minutes");
   cacheTag(OPPORTUNITIES_TAG);
   const rows = await baseSummaryQuery()
     .where(isVisible())
     .orderBy(desc(opportunities.publishedAt))
     .limit(limit);
+  cacheLife(homeListingCacheLife(rows));
   return rows.map(toSummary);
 }
 

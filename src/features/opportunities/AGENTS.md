@@ -7,6 +7,9 @@ Read `docs/domain.md` (business rules #1–#12) before changing anything here.
 - **Ordering**: featured first, then `published_at desc` (`searchOpportunities`).
 - **Public reads** (`queries.ts`) are `'use cache'` + `cacheLife("minutes")` + tags from `tags.ts`.
   They never include promoter PII — only `promoterUserId` (internal, never rendered).
+  Exception: queries rendered in the home's static shell use `cacheLife(homeListingCacheLife(rows))`
+  (≤ 1 h, earlier if a listed item closes — ADR-0014). Never give `/` a minute-level lifetime:
+  that re-renders the whole page every minute and uses up Vercel CPU.
 - **Mutations**: `server/actions.ts` (auth + `updateTag`) → `server/service.ts` (rules, ownership,
   upload-key checks, sanitising). Services take an explicit `Actor`; `isAdmin` comes from
   `@/lib/auth`, never from the client.
